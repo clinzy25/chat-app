@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+    "err": {
+      "name": "Error",
+      "message": "No package.json (or package.yaml, or package.json5) was found in \"D:\\code\\tracked\\jetfuel-assessment\".",
+      "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+      "stack": "Error: No package.json (or package.yaml, or package.json5) was found in \"D:\\code\\tracked\\jetfuel-assessment\".\n    at readProjectManifest (C:\\Users\\conne\\AppData\\Roaming\\npm\\pnpm-global\\5\\node_modules\\.pnpm\\pnpm@6.7.6\\node_modules\\pnpm\\dist\\pnpm.cjs:39736:13)\n    at async Object.readProjectManifestOnly (C:\\Users\\conne\\AppData\\Roaming\\npm\\pnpm-global\\5\\node_modules\\.pnpm\\pnpm@6.7.6\\node_modules\\pnpm\\dist\\pnpm.cjs:39740:28)\n    at async Object.readProjectManifestOnly (C:\\Users\\conne\\AppData\\Roaming\\npm\\pnpm-global\\5\\node_modules\\.pnpm\\pnpm@6.7.6\\node_modules\\pnpm\\dist\\pnpm.cjs:39959:24)\n    at async Object.handler (C:\\Users\\conne\\AppData\\Roaming\\npm\\pnpm-global\\5\\node_modules\\.pnpm\\pnpm@6.7.6\\node_modules\\pnpm\\dist\\pnpm.cjs:120460:24)\n    at async Timeout._onTimeout (C:\\Users\\conne\\AppData\\Roaming\\npm\\pnpm-global\\5\\node_modules\\.pnpm\\pnpm@6.7.6\\node_modules\\pnpm\\dist\\pnpm.cjs:124507:24)"
+    }
+  }
+}
