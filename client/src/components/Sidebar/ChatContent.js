@@ -32,6 +32,17 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     borderRadius: 10,
   },
+  unread: {
+    backgroundColor: 'dodgerblue',
+    minWidth: '30px',
+    height: 'min-content',
+    marginRight: '20px',
+    padding: '5px',
+    borderRadius: '100%',
+    textAlign: 'center',
+    fontWeight: '900',
+    color: 'white',
+  }
 }));
 
 const ChatContent = (props) => {
@@ -50,6 +61,9 @@ const ChatContent = (props) => {
           {latestMessageText}
         </Typography>
       </Box>
+      {conversation.unreadMessages && (
+        <Box className={classes.unread}>{conversation.unreadMessages}</Box>
+      )}
     </Box>
   );
 };
