@@ -1,3 +1,5 @@
+const clone = require("rfdc")();
+
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
@@ -5,7 +7,7 @@ export const addMessageToStore = (state, payload) => {
     const newConvo = {
       id: message.conversationId,
       otherUser: sender,
-      messages: [message],
+      messages: [message]
     };
     newConvo.latestMessageText = message.text;
     return [newConvo, ...state];
@@ -13,7 +15,7 @@ export const addMessageToStore = (state, payload) => {
 
   return state.map((convo) => {
     if (convo.id === message.conversationId) {
-      const convoCopy = { ...convo };
+      const convoCopy = clone(convo);
       convoCopy.messages.push(message);
       convoCopy.messages.sort((a, b) => a - b);
       convoCopy.latestMessageText = message.text;
@@ -28,7 +30,7 @@ export const addMessageToStore = (state, payload) => {
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {
-      const convoCopy = { ...convo };
+      const convoCopy = clone(convo);
       convoCopy.otherUser.online = true;
       return convoCopy;
     } else {
@@ -40,7 +42,7 @@ export const addOnlineUserToStore = (state, id) => {
 export const removeOfflineUserFromStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {
-      const convoCopy = { ...convo };
+      const convoCopy = clone(convo);
       convoCopy.otherUser.online = false;
       return convoCopy;
     } else {
@@ -57,7 +59,7 @@ export const addSearchedUsersToStore = (state, users) => {
     currentUsers[convo.otherUser.id] = true;
   });
 
-  const newState = [...state];
+  const newState = clone(state);
   users.forEach((user) => {
     // only create a fake convo if we don't already have a convo with this user
     if (!currentUsers[user.id]) {
@@ -72,7 +74,7 @@ export const addSearchedUsersToStore = (state, users) => {
 export const addNewConvoToStore = (state, recipientId, message) => {
   return state.map((convo) => {
     if (convo.otherUser.id === recipientId) {
-      const newConvo = { ...convo };
+      const newConvo = clone(convo);
       newConvo.id = message.conversationId;
       newConvo.messages.push(message);
       newConvo.latestMessageText = message.text;
