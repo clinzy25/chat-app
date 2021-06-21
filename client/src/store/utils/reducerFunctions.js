@@ -16,9 +16,17 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
+      if (convo.otherUser.id === message.senderId) {
+        if (convoCopy.unreadMessages) {
+          convoCopy.unreadMessages++;
+        } else {
+          convoCopy.unreadMessages = 1;
+        }
+      }
 
       return convoCopy;
     } else {
+      console.log("sender is null");
       return convo;
     }
   });
