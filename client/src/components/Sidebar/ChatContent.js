@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,16 +34,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 10,
   },
   unread: {
-    backgroundColor: 'dodgerblue',
-    minWidth: '30px',
-    height: 'min-content',
-    marginRight: '20px',
-    padding: '5px',
-    borderRadius: '100%',
-    textAlign: 'center',
-    fontWeight: '900',
-    color: 'white',
-  }
+    backgroundColor: "dodgerblue",
+    minWidth: "30px",
+    height: "min-content",
+    marginRight: "20px",
+    padding: "5px",
+    borderRadius: "100%",
+    textAlign: "center",
+    fontWeight: "900",
+    color: "white",
+  },
 }));
 
 const ChatContent = (props) => {
@@ -51,6 +52,10 @@ const ChatContent = (props) => {
   const { conversation } = props;
   const { latestMessageText, otherUser } = conversation;
 
+  const unread = JSON.parse(
+    localStorage.getItem(`${otherUser.username}_unread_messages`)
+  );
+  
   return (
     <Box className={classes.root}>
       <Box>
@@ -61,9 +66,7 @@ const ChatContent = (props) => {
           {latestMessageText}
         </Typography>
       </Box>
-      {conversation.unreadMessages && (
-        <Box className={classes.unread}>{conversation.unreadMessages}</Box>
-      )}
+      {unread && <Box className={classes.unread}>{unread}</Box>}
     </Box>
   );
 };

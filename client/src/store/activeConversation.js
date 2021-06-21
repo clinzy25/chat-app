@@ -10,6 +10,7 @@ export const setActiveChat = (username) => {
 const reducer = (state = "", action) => {
   switch (action.type) {
     case SET_ACTIVE_CHAT: {
+      localStorage.removeItem(`${action.username}_unread_messages`);
       return action.username;
     }
     default:
