@@ -35,7 +35,7 @@ const ActiveChat = (props) => {
           />
           <Box className={classes.chatContainer}>
             <Messages
-              messages={conversation.messages.sort((a, b) => a - b)}
+              messages={conversation.messages}
               otherUser={conversation.otherUser}
               userId={user.id}
             />

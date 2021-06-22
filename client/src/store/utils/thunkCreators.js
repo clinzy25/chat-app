@@ -78,6 +78,15 @@ export const fetchConversations = () => async (dispatch) => {
   }
 };
 
+export const updateReadStatus = (body) => async (dispatch) => {
+  try {
+    const data = await axios.post("/api/conversationsPost", body);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const saveMessage = async (body) => {
   try {
     const { data } = await axios.post("/api/messages", body);
