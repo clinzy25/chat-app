@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
+import { SenderBubble } from "../ActiveChat";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,10 +52,18 @@ const ChatContent = (props) => {
   const { conversation } = props;
   const { latestMessageText, otherUser } = conversation;
 
-  const unread = JSON.parse(
-    localStorage.getItem(`${otherUser.username}_unread_messages`)
-  );
+  const getNumUnreadMessages = () => {
+    let unreadMessages = 0;
+    conversation.messages.forEach((msg) => {
+      if (msg.read === false && msg.senderId === otherUser.id) {
+        unreadMessages++;
+      }
+    });
+    return unreadMessages === 0 ? null : unreadMessages;
+  };
   
+  const unreadMessages = getNumUnreadMessages();
+
   return (
     <Box className={classes.root}>
       <Box>
@@ -66,7 +74,7 @@ const ChatContent = (props) => {
           {latestMessageText}
         </Typography>
       </Box>
-      {unread && <Box className={classes.unread}>{unread}</Box>}
+      {unreadMessages && <Box className={classes.unread}>{unreadMessages}</Box>}
     </Box>
   );
 };
