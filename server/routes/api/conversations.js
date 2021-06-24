@@ -20,9 +20,9 @@ router.get("/", async (req, res, next) => {
         },
       },
       attributes: ["id"],
-      order: [[Message, "createdAt", "DESC"]],
+      order: [[Message, "createdAt", "ASC"]],
       include: [
-        { model: Message, order: ["createdAt", "DESC"] },
+        { model: Message, order: ["createdAt", "ASC"] },
         {
           model: User,
           as: "user1",
@@ -32,7 +32,7 @@ router.get("/", async (req, res, next) => {
             },
           },
           attributes: ["id", "username", "photoUrl"],
-          required: false,
+          required: true,
         },
         {
           model: User,
@@ -43,7 +43,7 @@ router.get("/", async (req, res, next) => {
             },
           },
           attributes: ["id", "username", "photoUrl"],
-          required: false,
+          required: true,
         },
       ],
     });
