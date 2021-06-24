@@ -2,6 +2,7 @@ const clone = require("rfdc")();
 
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
+  const newState = clone(state);
   // if sender isn't null, that means the message needs to be put in a brand new convo
   if (sender !== null) {
     const newConvo = {
@@ -10,16 +11,15 @@ export const addMessageToStore = (state, payload) => {
       messages: [message]
     };
     newConvo.latestMessageText = message.text;
-    return [newConvo, ...state];
+    return [newConvo, ...newState];
   }
 
-  return state.map((convo) => {
+  return newState.map((convo) => {
     if (convo.id === message.conversationId) {
       const convoCopy = clone(convo);
       convoCopy.messages.push(message);
       convoCopy.messages.sort((a, b) => a - b);
       convoCopy.latestMessageText = message.text;
-
       return convoCopy;
     } else {
       return convo;
@@ -83,4 +83,24 @@ export const addNewConvoToStore = (state, recipientId, message) => {
       return convo;
     }
   });
+};
+
+export const setReadMessages = (state, conversationId) => {
+  const newState = state.map((convo) => {
+    if (convo.id === conversationId) {
+      const newMessages = convo.messages.map((msg) => {
+        if (msg.senderId === convo.otherUser.id) {
+          const newMsg = clone(msg);
+          newMsg.read = true;
+          return newMsg;
+        } else {
+          return msg;
+        }
+      });
+      return { ...convo, messages: newMessages };
+    } else {
+      return convo;
+    }
+  });
+  return newState;
 };
