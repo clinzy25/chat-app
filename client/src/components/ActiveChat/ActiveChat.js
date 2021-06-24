@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
     flexGrow: 8,
-    flexDirection: "column"
+    flexDirection: "column",
   },
   chatContainer: {
     marginLeft: 41,
@@ -16,8 +16,8 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
-    justifyContent: "space-between"
-  }
+    justifyContent: "space-between",
+  },
 }));
 
 const ActiveChat = (props) => {
@@ -35,7 +35,7 @@ const ActiveChat = (props) => {
           />
           <Box className={classes.chatContainer}>
             <Messages
-              messages={conversation.messages.sort((a, b) => a - b)}
+              messages={conversation.messages}
               otherUser={conversation.otherUser}
               userId={user.id}
             />
@@ -59,7 +59,7 @@ const mapStateToProps = (state) => {
       state.conversations.find(
         (conversation) =>
           conversation.otherUser.username === state.activeConversation
-      )
+      ),
   };
 };
 
