@@ -35,7 +35,7 @@ const ActiveChat = (props) => {
           />
           <Box className={classes.chatContainer}>
             <Messages
-              messages={conversation.messages}
+              messages={conversation.messages.sort((a, b) => a - b)}
               otherUser={conversation.otherUser}
               userId={user.id}
             />
@@ -59,7 +59,11 @@ const mapStateToProps = (state) => {
       state.conversations.find(
         (conversation) =>
           conversation.otherUser.username === state.activeConversation
+<<<<<<< HEAD
       ),
+=======
+      )
+>>>>>>> 5011debf7abde1b50f49027b9357843907871516
   };
 };
 

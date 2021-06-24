@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"singleQuote": false, "trailingComma": "es5"}
+=======
+{ "single-quote": "false", "trailingComma": "none" }
+>>>>>>> 5011debf7abde1b50f49027b9357843907871516

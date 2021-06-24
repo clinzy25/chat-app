@@ -17,6 +17,7 @@ export const addMessageToStore = (state, payload) => {
     if (convo.id === message.conversationId) {
       const convoCopy = clone(convo);
       convoCopy.messages.push(message);
+      convoCopy.messages.sort((a, b) => a - b);
       convoCopy.latestMessageText = message.text;
 
       return convoCopy;
