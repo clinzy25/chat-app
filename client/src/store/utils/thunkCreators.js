@@ -71,7 +71,7 @@ export const fetchConversations = () => async (dispatch) => {
 
 export const updateReadStatus = (body) => async (dispatch) => {
   try {
-    const data = await axios.post("/api/conversationsPost", body);
+    const data = await axios.put("/api/conversationsPost", body);
     return data;
   } catch (error) {
     console.error(error);

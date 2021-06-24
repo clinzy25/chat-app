@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { SenderBubble } from "../ActiveChat";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,17 +51,23 @@ const ChatContent = (props) => {
   const { conversation } = props;
   const { latestMessageText, otherUser } = conversation;
 
-  const getNumUnreadMessages = () => {
+  const [unreadMessages, setUnreadMessages] = useState(null);
+
+  const getNumUnreadMessages = useCallback(() => {
     let unreadMessages = 0;
     conversation.messages.forEach((msg) => {
       if (msg.read === false && msg.senderId === otherUser.id) {
         unreadMessages++;
       }
     });
-    return unreadMessages === 0 ? null : unreadMessages;
-  };
-  
-  const unreadMessages = getNumUnreadMessages();
+    return unreadMessages === 0
+      ? setUnreadMessages(null)
+      : setUnreadMessages(unreadMessages);
+  }, [conversation.messages, otherUser]);
+
+  useEffect(() => {
+    getNumUnreadMessages();
+  }, [getNumUnreadMessages]);
 
   return (
     <Box className={classes.root}>
