@@ -32,7 +32,7 @@ router.get("/", async (req, res, next) => {
             },
           },
           attributes: ["id", "username", "photoUrl"],
-          required: false,
+          required: true,
         },
         {
           model: User,
@@ -43,7 +43,7 @@ router.get("/", async (req, res, next) => {
             },
           },
           attributes: ["id", "username", "photoUrl"],
-          required: false,
+          required: true,
         },
       ],
     });

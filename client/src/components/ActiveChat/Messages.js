@@ -39,8 +39,7 @@ const Messages = (props) => {
   return (
     <Box>
       {messages.map((message) => {
-        const time = moment(message.createdAt).format("h:mm");
-
+          const time = moment(message.createdAt).format("h:mm");
         return message.senderId === userId ? (
           <div className={classes.msgContainer}>
             <SenderBubble key={message.id} text={message.text} time={time} />

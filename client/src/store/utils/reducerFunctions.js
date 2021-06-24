@@ -8,7 +8,7 @@ export const addMessageToStore = (state, payload) => {
     const newConvo = {
       id: message.conversationId,
       otherUser: sender,
-      messages: [message],
+      messages: [message]
     };
     newConvo.latestMessageText = message.text;
     return [newConvo, ...newState];
@@ -18,6 +18,7 @@ export const addMessageToStore = (state, payload) => {
     if (convo.id === message.conversationId) {
       const convoCopy = clone(convo);
       convoCopy.messages.push(message);
+      convoCopy.messages.sort((a, b) => a - b);
       convoCopy.latestMessageText = message.text;
       return convoCopy;
     } else {
