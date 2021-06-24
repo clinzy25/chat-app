@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { Message } = require("../../db/models");
 
-router.post("/", async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
@@ -11,7 +11,7 @@ router.post("/", async (req, res, next) => {
       { read: true },
       {
         where: {
-          conversationId: conversation,
+          conversationId: conversation || null,
           senderId: otherUserId,
         },
       }
