@@ -26,7 +26,6 @@ app.use(function (req, res, next) {
   if (token) {
     jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
-        console.log(err);
         return next();
       }
       User.findOne({
