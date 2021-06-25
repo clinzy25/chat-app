@@ -17,10 +17,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Messages = (props) => {
+const Messages = ({ messages, otherUser, userId }) => {
   const classes = useStyles();
-
-  const { messages, otherUser, userId } = props;
 
   const [lastReadMessage, setLastReadMessage] = useState(null);
 
@@ -39,7 +37,8 @@ const Messages = (props) => {
   return (
     <Box>
       {messages.map((message) => {
-          const time = moment(message.createdAt).format("h:mm");
+        const time = moment(message.createdAt).format("h:mm");
+        
         return message.senderId === userId ? (
           <div className={classes.msgContainer}>
             <SenderBubble key={message.id} text={message.text} time={time} />
