@@ -1,5 +1,5 @@
 import axios from "axios";
-// import socket from "../../socket";
+import socket from "../../socket";
 import {
   gotConversations,
   addConversation,
@@ -7,57 +7,6 @@ import {
   setSearchedUsers,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
-import io from "socket.io-client";
-// import store from "./store";
-import { removeOfflineUser, addOnlineUser } from "../conversations";
-
-/**
- * Create socket connection when user logs in or registers
- */
-
-const createSocket = (data, dispatch) => {
-  const socket = io(window.location.origin);
-  
-  let authenticated = false;
-  
-  socket.on("connect", () => {
-    console.log("connected to server");
-    socket.emit("authentication", {
-      username: data.username,
-    });
-    
-    socket.on("authenticated", () => {
-      authenticated = true;
-      socket.emit("go-online", data.id);
-    });
-    
-    socket.on("add-online-user", (id) => {
-      if (authenticated) {
-        dispatch(addOnlineUser(id));
-      } else {
-        console.log("Invalid user");
-      }
-    });
-    
-    socket.on("remove-offline-user", (id) => {
-      if (authenticated) {
-        dispatch(removeOfflineUser(id));
-      } else {
-        console.log("User not found");
-      }
-    });
-    
-    socket.on("new-message", (data) => {
-      if (authenticated) {
-        dispatch(setNewMessage(data.message, data.sender, data.recipientId));
-      } else {
-        console.log("Invalid user");
-      }
-    });
-  });
-  
-  return socket;
-};
 
 // USER THUNK CREATORS
 
@@ -77,7 +26,7 @@ export const register = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/register", credentials);
     dispatch(gotUser(data));
-    createSocket(data);
+    window.location.reload();
   } catch (error) {
     console.error(error);
     dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
@@ -88,7 +37,7 @@ export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
     dispatch(gotUser(data));
-    createSocket(data);
+    window.location.reload();
   } catch (error) {
     console.error(error);
     dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
@@ -99,7 +48,7 @@ export const logout = (id) => async (dispatch) => {
   try {
     await axios.delete("/auth/logout");
     dispatch(gotUser({}));
-    createSocket(id).emit("logout", id);
+    socket.emit("logout", id);
   } catch (error) {
     console.error(error);
   }
@@ -135,7 +84,7 @@ const saveMessage = async (body) => {
 };
 
 const sendMessage = (data, body) => {
-  createSocket(data).emit("new-message", {
+  socket.emit("new-message", {
     message: data.message,
     recipientId: body.recipientId,
     sender: data.sender,
