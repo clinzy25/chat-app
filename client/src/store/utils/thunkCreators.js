@@ -7,6 +7,10 @@ import {
   setSearchedUsers,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
+import io from "socket.io-client";
+// import store from "./store";
+import { removeOfflineUser, addOnlineUser } from "../conversations";
+import socket from "../../socket";
 
 // USER THUNK CREATORS
 
@@ -26,7 +30,7 @@ export const register = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/register", credentials);
     dispatch(gotUser(data));
-    window.location.reload();
+    // createSocket(data);
   } catch (error) {
     console.error(error);
     dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
@@ -37,7 +41,7 @@ export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
     dispatch(gotUser(data));
-    window.location.reload();
+    // createSocket(data);
   } catch (error) {
     console.error(error);
     dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
