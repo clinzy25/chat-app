@@ -80,9 +80,10 @@ io.on("connection", (socket) => {
   });
   // Uncomment for socket logging
   
-  // socket.onAny((event, ...args) => {
-  //   console.log(event, args);
-  // });
+  socket.onAny((event, ...args) => {
+    console.log(event, args);
+    console.log(onlineUsers)
+  });
 });
 
 auth(io, {
