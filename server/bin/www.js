@@ -84,10 +84,6 @@ auth(io, {
   authenticate,
 });
 
-auth(io, {
-  authenticate,
-});
-
 sessionStore
   .sync()
   .then(() => db.sync())

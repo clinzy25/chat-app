@@ -45,16 +45,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Header = (props) => {
+const Header = ({ username, online }) => {
   const classes = useStyles();
-  const { username, online } = props;
 
   return (
     <Box className={classes.root}>
       <Box className={classes.content}>
         <Typography className={classes.username}>{username}</Typography>
-        <Box className={`${classes.statusDot} ${classes[online && "online"]}`}></Box>
-        <Typography className={classes.statusText}>{online ? "Online" : "Offline"}</Typography>
+        <Box
+          className={`${classes.statusDot} ${classes[online && "online"]}`}
+        ></Box>
+        <Typography className={classes.statusText}>
+          {online ? "Online" : "Offline"}
+        </Typography>
       </Box>
       <MoreHorizIcon classes={{ root: classes.ellipsis }} />
     </Box>

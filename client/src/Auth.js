@@ -5,6 +5,7 @@ import { Box, Typography, Button, makeStyles } from "@material-ui/core";
 import { login, register } from "./store/utils/thunkCreators";
 import { Login } from "./components/Auth/Login";
 import { Signup } from "./components/Auth/Signup";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -87,22 +88,26 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Auth = (props) => {
-  const { user, login, register } = props;
+const Auth = () => {
+  // const { user, login, register } = props;
   const classes = useStyles();
+
+  const { user } = useSelector((state) => state);
+
+  const dispatch = useDispatch();
 
   const [authType, setAuthType] = useState("Signup");
   const [formErrorMessage, setFormErrorMessage] = useState({});
 
-  const handleLogin = async (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
     const username = event.target.username.value;
     const password = event.target.password.value;
 
-    await login({ username, password });
+    dispatch(login({ username, password }));
   };
 
-  const handleRegister = async (event) => {
+  const handleRegister = (event) => {
     event.preventDefault();
     const username = event.target.username.value;
     const email = event.target.email.value;
@@ -114,7 +119,7 @@ const Auth = (props) => {
       return;
     }
 
-    await register({ username, email, password });
+    dispatch(register({ username, email, password }));
   };
 
   if (user.id) {
@@ -180,21 +185,4 @@ const Auth = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    login: (credentials) => {
-      dispatch(login(credentials));
-    },
-    register: (credentials) => {
-      dispatch(register(credentials));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default Auth;
