@@ -78,6 +78,9 @@ io.on("connection", (socket) => {
       delete onlineUsers[id];
     }
   });
+  socket.onAny((eventName, ...args) => {
+    console.log(eventName, args)
+  });
 });
 
 auth(io, {
