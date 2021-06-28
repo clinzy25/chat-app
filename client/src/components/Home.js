@@ -43,7 +43,7 @@ class Home extends Component {
     if (!this.props.user.id) {
       // If we were previously logged in, redirect to login instead of register
       if (this.state.isLoggedIn) return <Redirect to="/login" />;
-      return <Redirect to="/auth" />;
+      return <Redirect to="/register" />;
     }
     return (
       <>
