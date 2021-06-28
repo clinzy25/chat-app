@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
-import { Grid, CssBaseline, Button } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { SidebarContainer } from "./Sidebar";
 import { ActiveChat } from "./ActiveChat";
 import { logout, fetchConversations } from "../store/utils/thunkCreators";
@@ -48,7 +48,6 @@ const Home = () => {
         Logout
       </Button>
       <Grid container component="main" className={classes.root}>
-        <CssBaseline />
         <SidebarContainer />
         <ActiveChat />
       </Grid>

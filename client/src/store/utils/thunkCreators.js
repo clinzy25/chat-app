@@ -7,8 +7,7 @@ import {
   setSearchedUsers,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
-import io from "socket.io-client";
-import { removeOfflineUser, addOnlineUser } from "../conversations";
+
 
 // USER THUNK CREATORS
 
@@ -101,7 +100,6 @@ export const postMessage = (body) => async (dispatch) => {
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
       sendMessage(data, body);
-      console.log('hey')
     } else {
       dispatch(setNewMessage(data.message));
       sendMessage(data, body);
