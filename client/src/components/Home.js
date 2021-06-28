@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { Grid, CssBaseline, Button } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { SidebarContainer } from "./Sidebar";
 import { ActiveChat } from "./ActiveChat";
 import { logout, fetchConversations } from "../store/utils/thunkCreators";
@@ -52,7 +52,6 @@ class Home extends Component {
           Logout
         </Button>
         <Grid container component="main" className={classes.root}>
-          <CssBaseline />
           <SidebarContainer />
           <ActiveChat />
         </Grid>
