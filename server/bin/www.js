@@ -78,11 +78,6 @@ io.on("connection", (socket) => {
       delete onlineUsers[id];
     }
   });
-  // Uncomment for socket logging
-  
-  // socket.onAny((event, ...args) => {
-  //   console.log(event, args);
-  // });
 });
 
 auth(io, {
