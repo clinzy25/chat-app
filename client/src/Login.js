@@ -8,79 +8,12 @@ import {
   Button,
   FormControl,
   TextField,
-  makeStyles,
 } from "@material-ui/core";
 import { login } from "./store/utils/thunkCreators";
-
-const useStyles = makeStyles(() => ({
-  root: {
-    display: "flex",
-  },
-  bg: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundImage:
-      "linear-gradient(to top, rgba(134, 185, 255, 85%), rgba(58, 141, 255, 85%)), url(./assets/images/bg-img-compressed.png)",
-    backgroundSize: "cover",
-    height: "100vh",
-    width: "40%",
-    color: "white",
-    textAlign: "center",
-  },
-  converse: {
-    margin: "50px 100px 100px 100px",
-  },
-  speechBubble: {
-    height: "100px",
-  },
-  formContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 1,
-  },
-  loginOrRegister: {
-    display: "flex",
-    alignItems: "center",
-    position: "absolute",
-    right: "0%",
-    margin: "30px",
-  },
-  prompt: {
-    color: "#BFBEBE",
-  },
-  promptBtn: {
-    padding: "20px 50px",
-    borderRadius: "5px",
-    marginLeft: "30px",
-    boxShadow: "0 0 10px #CFCECE",
-    color: "#3A8DFF",
-  },
-  form: {
-    width: "60%",
-  },
-  formField: {
-    width: "100%",
-    marginTop: "50px",
-  },
-  submitBtn: {
-    backgroundColor: "#3A8DFF",
-    color: "white",
-    padding: "20px 75px",
-  },
-  submitBtnContainer: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "75px",
-  },
-}));
 
 const Login = (props) => {
   const history = useHistory();
   const { user, login } = props;
-  const classes = useStyles();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -95,72 +28,41 @@ const Login = (props) => {
   }
 
   return (
-    <Box className={classes.root} container justify="center">
-      <div className={classes.bg}>
-        <img
-          className={classes.speechBubble}
-          src="./assets/icons/bubble.svg"
-          alt=""
-        />
-        <Typography className={classes.converse} style={{ fontSize: "2.5rem" }}>
-          Converse with anyone in any language
-        </Typography>
-      </div>
-      <Box className={classes.loginOrRegister}>
-        <Typography style={{ fontSize: "1.3rem" }} className={classes.prompt}>
-          Don't have an account?
-        </Typography>
-        <Button
-          style={{ fontSize: "1.3rem" }}
-          className={classes.promptBtn}
-          onClick={() => history.push("/register")}
-        >
-          Create Account
-        </Button>
-      </Box>
-      <Box className={classes.formContainer}>
-        <form className={classes.form} onSubmit={handleLogin}>
-          <Typography style={{ fontSize: "2.5rem", fontWeight: "700" }}>
-            Welcome Back!
-          </Typography>
-          <Box>
-            <Box>
-              <FormControl
-                className={classes.formField}
-                margin="normal"
-                required
-              >
+    <Grid container justify="center">
+      <Box>
+        <Grid container item>
+          <Typography>Need to register?</Typography>
+          <Button onClick={() => history.push("/register")}>Register</Button>
+        </Grid>
+        <form onSubmit={handleLogin}>
+          <Grid>
+            <Grid>
+              <FormControl margin="normal" required>
                 <TextField
-                  aria-label="e-mail address"
-                  label="E-mail address"
+                  aria-label="username"
+                  label="Username"
                   name="username"
                   type="text"
                 />
               </FormControl>
-            </Box>
-            <FormControl className={classes.formField} margin="normal" required>
+            </Grid>
+            <FormControl margin="normal" required>
               <TextField
-                label="Password"
+                label="password"
                 aria-label="password"
                 type="password"
                 name="password"
               />
             </FormControl>
-            <Box className={classes.submitBtnContainer}>
-              <Button
-                className={classes.submitBtn}
-                style={{ fontSize: "1.3rem" }}
-                type="submit"
-                variant="contained"
-                size="large"
-              >
+            <Grid>
+              <Button type="submit" variant="contained" size="large">
                 Login
               </Button>
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
         </form>
       </Box>
-    </Box>
+    </Grid>
   );
 };
 
