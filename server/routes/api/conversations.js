@@ -32,7 +32,7 @@ router.get("/", async (req, res, next) => {
             },
           },
           attributes: ["id", "username", "photoUrl"],
-          required: false,
+          required: true,
         },
         {
           model: User,
@@ -43,7 +43,7 @@ router.get("/", async (req, res, next) => {
             },
           },
           attributes: ["id", "username", "photoUrl"],
-          required: false,
+          required: true,
         },
       ],
     });
@@ -62,7 +62,7 @@ router.get("/", async (req, res, next) => {
       }
 
       // set property for online status of the other user
-      if (onlineUsers[convoJSON.otherUser.id]) {
+      if (onlineUsers.includes(convoJSON.otherUser.id)) {
         convoJSON.otherUser.online = true;
       } else {
         convoJSON.otherUser.online = false;

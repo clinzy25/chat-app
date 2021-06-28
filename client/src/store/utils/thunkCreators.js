@@ -4,9 +4,10 @@ import {
   gotConversations,
   addConversation,
   setNewMessage,
-  setSearchedUsers,
+  setSearchedUsers
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
+
 
 // USER THUNK CREATORS
 
@@ -101,7 +102,6 @@ export const postMessage = (body) => async (dispatch) => {
     const data = await saveMessage(body);
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
-      sendMessage(data, body);
     } else {
       dispatch(setNewMessage(data.message));
       sendMessage(data, body);

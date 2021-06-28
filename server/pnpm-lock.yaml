@@ -7,7 +7,6 @@ specifiers:
   cookie-parser: ^1.4.5
   dotenv: ^8.2.0
   express: ^4.17.1
-  express-http-proxy: ^1.6.2
   express-session: ^1.17.1
   http-errors: ~1.8.0
   jsonwebtoken: ^8.5.1
@@ -17,14 +16,12 @@ specifiers:
   pg: ^8.5.1
   sequelize: ^6.3.5
   socket.io: ^3.0.4
-  socketio-auth: ^0.1.1
 
 dependencies:
   connect-session-sequelize: 7.1.1_sequelize@6.6.2
   cookie-parser: 1.4.5
   dotenv: 8.6.0
   express: 4.17.1
-  express-http-proxy: 1.6.2
   express-session: 1.17.2
   http-errors: 1.8.0
   jsonwebtoken: 8.5.1
@@ -33,7 +30,6 @@ dependencies:
   pg: 8.6.0
   sequelize: 6.6.2_pg@8.6.0
   socket.io: 3.1.2
-  socketio-auth: 0.1.1
 
 devDependencies:
   chai: 4.3.4
@@ -707,10 +703,6 @@ packages:
       is-symbol: 1.0.4
     dev: false
 
-  /es6-promise/4.2.8:
-    resolution: {integrity: sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==}
-    dev: false
-
   /escalade/3.1.1:
     resolution: {integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==}
     engines: {node: '>=6'}
@@ -733,15 +725,6 @@ packages:
   /etag/1.8.1:
     resolution: {integrity: sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=}
     engines: {node: '>= 0.6'}
-    dev: false
-
-  /express-http-proxy/1.6.2:
-    resolution: {integrity: sha512-soP7UXySFdLbeeMYL1foBkEoZj6HELq9BDAOCr1sLRpqjPaFruN5o6+bZeC+7U4USWIl4JMKEiIvTeKJ2WQdlQ==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      debug: 3.2.7
-      es6-promise: 4.2.8
-      raw-body: 2.4.1
     dev: false
 
   /express-session/1.17.2:
@@ -993,17 +976,6 @@ packages:
     dependencies:
       depd: 1.1.2
       inherits: 2.0.3
-      setprototypeof: 1.1.1
-      statuses: 1.5.0
-      toidentifier: 1.0.0
-    dev: false
-
-  /http-errors/1.7.3:
-    resolution: {integrity: sha512-ZTTX0MWrsQ2ZAhA1cejAwDLycFsd7I7nVtnkT3Ol0aqodaKW+0CTZDQ1uBv5whptCnc8e8HeRRJxRs0kmm/Qfw==}
-    engines: {node: '>= 0.6'}
-    dependencies:
-      depd: 1.1.2
-      inherits: 2.0.4
       setprototypeof: 1.1.1
       statuses: 1.5.0
       toidentifier: 1.0.0
@@ -1791,16 +1763,6 @@ packages:
       unpipe: 1.0.0
     dev: false
 
-  /raw-body/2.4.1:
-    resolution: {integrity: sha512-9WmIKF6mkvA0SLmA2Knm9+qj89e+j1zqgyn8aXGd7+nAduPoqgI9lO57SAZNn/Byzo5P7JhXTyg9PzaJbH73bA==}
-    engines: {node: '>= 0.8'}
-    dependencies:
-      bytes: 3.1.0
-      http-errors: 1.7.3
-      iconv-lite: 0.4.24
-      unpipe: 1.0.0
-    dev: false
-
   /rc/1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
@@ -2053,13 +2015,6 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: false
-
-  /socketio-auth/0.1.1:
-    resolution: {integrity: sha512-TDM/yiA5tnDiJqn8fO5zHrvTaKmN4EK4Dci9RaJLO11LEEbC1/E7z352OFrIWg8d/rn+Nk666ks9RhjlkGILlA==}
-    dependencies:
-      debug: 2.6.9
-      lodash: 4.17.21
     dev: false
 
   /split2/3.2.2:
