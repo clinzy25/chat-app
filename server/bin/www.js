@@ -38,6 +38,7 @@ const io = require("socket.io")(server);
  */
 
 const authenticate = async (socket, data, callback) => {
+  console.log(onlineUsers);
   const username = data.username;
   try {
     const user = await User.findOne({
@@ -63,7 +64,7 @@ io.on("connection", (socket) => {
   /**
    * Lookup online user with socket id
    */
-
+  
   socket.on("new-message", (data) => {
     socket.to(onlineUsers[data.recipientId]).emit("new-message", {
       message: data.message,
@@ -74,15 +75,15 @@ io.on("connection", (socket) => {
 
   socket.on("logout", (id) => {
     if (onlineUsers[id]) {
-      socket.disconnect();
+      console.log("logout");
       delete onlineUsers[id];
     }
+    console.log("failed loguot");
   });
-  // Uncomment for socket logging
-  
-  // socket.onAny((event, ...args) => {
-  //   console.log(event, args);
-  // });
+
+  socket.onAny((event, ...args) => {
+    console.log(event, args);
+  });
 });
 
 auth(io, {
