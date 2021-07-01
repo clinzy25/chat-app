@@ -3,10 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "debug": "nodemon  --inspect ./bin/www",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000",
-    "seed": "node db/seed.js"
+    "client-install": "npm install --prefix client",
+    "build": "concurrently \"cd client && npm run build\" \"npm build \"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "cd ./client && npm start ",
+    "server-prod": "node app.js",
+    "server": "nodemon app.js",
+    "start": "node app.js",
+    "start:dev": "concurrently --kill-others  \"npm run client\" \"npm run server\" ",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "connect-session-sequelize": "^7.0.4",
