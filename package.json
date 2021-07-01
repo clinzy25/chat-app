@@ -7,11 +7,11 @@
     "build": "concurrently \"cd client && npm run build\" \"npm build \"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd ./client && npm start ",
-    "server-prod": "node app.js",
-    "server": "nodemon app.js",
-    "start": "node app.js",
+    "server-prod": "node ./bin/www",
+    "server": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "start:dev": "concurrently --kill-others  \"npm run client\" \"npm run server\" ",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "connect-session-sequelize": "^7.0.4",
