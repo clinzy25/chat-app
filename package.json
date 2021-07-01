@@ -11,7 +11,6 @@
     "server": "nodemon ./bin/www",
     "start": "node ./bin/www",
     "start:dev": "concurrently --kill-others  \"npm run client\" \"npm run server\" ",
-    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "connect-session-sequelize": "^7.0.4",
