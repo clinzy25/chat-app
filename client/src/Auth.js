@@ -89,7 +89,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /**
- * Dynamically switch content by authType ('signup or login). 
+ * Dynamically switch content by authType ('signup or login) with ternaries
  * @returns Authorization page
  */
 const Auth = () => {
@@ -177,6 +177,7 @@ const Auth = () => {
           >
             {authType === "Signup" ? "Create an account." : "Welcome back!"}
           </Typography>
+          {/* Show login or signup components dynamically */}
           {authType === "Signup" ? (
             <Signup formErrorMessage={formErrorMessage} classes={classes} />
           ) : (
