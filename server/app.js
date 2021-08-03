@@ -1,6 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
-const { join } = require("path");
+const path = require("path");
 const logger = require("morgan");
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
@@ -18,7 +18,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "build")));
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
@@ -43,6 +43,9 @@ app.use(function (req, res, next) {
 // require api routes here after I create them
 app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
