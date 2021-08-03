@@ -83,7 +83,12 @@ export const addNewConvoToStore = (state, recipientId, message) => {
     }
   });
 };
-
+/**
+ * Set all unread msgs to 'read' when user opens conversation by conversationId
+ * @param {object} state 
+ * @param {number} conversationId 
+ * @returns updated state
+ */
 export const setReadMessages = (state, conversationId) => {
   const newState = state.map((convo) => {
     if (convo.id === conversationId) {

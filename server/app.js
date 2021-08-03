@@ -1,6 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
-const { join } = require("path");
+const path = require("path");
 const logger = require("morgan");
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
@@ -18,7 +18,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
 app.use(function (req, res, next) {

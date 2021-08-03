@@ -64,6 +64,11 @@ export const fetchConversations = () => async (dispatch) => {
   }
 };
 
+/**
+ * 
+ * @param {*} body 
+ * @returns 
+ */
 export const updateReadStatus = (body) => async (dispatch) => {
   try {
     const data = await axios.put("/api/conversationsPost", body);
