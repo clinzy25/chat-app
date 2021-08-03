@@ -18,7 +18,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "build")));
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
 // app.use(express.static(path.join(__dirname, "build")));
 
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 // require api routes here after I create them
