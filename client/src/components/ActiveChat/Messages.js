@@ -22,6 +22,10 @@ const Messages = ({ messages, otherUser, userId }) => {
 
   const [lastReadMessage, setLastReadMessage] = useState(null);
 
+  /**
+   * Search user messages and find last message where messages.read is true
+   * Then create stateful value
+   */
   const getLastReadMessage = useCallback(() => {
     for (let i = 0; i < messages.length; i++) {
       if (messages[i].read === true && messages[i].senderId === userId) {

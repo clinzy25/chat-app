@@ -11,10 +11,13 @@ const db = new Sequelize(
       dialect: "postgres",
       ssl: true,
       dialectOptions: {
-        ssl: true,
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
       },
     },
   }
-)
+);
 
 module.exports = db;
