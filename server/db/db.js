@@ -7,14 +7,12 @@ const db = new Sequelize(
     "postgres://postgres:8150@localhost:5432/messenger",
   {
     logging: false,
-    options: {
-      dialect: "postgres",
-      ssl: true,
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
+    dialect: "postgres",
+    ssl: true,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
       },
     },
   }

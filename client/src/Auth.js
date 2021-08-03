@@ -88,8 +88,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+/**
+ * Dynamically switch content by authType ('signup or login). 
+ * @returns Authorization page
+ */
 const Auth = () => {
-  // const { user, login, register } = props;
   const classes = useStyles();
 
   const { user } = useSelector((state) => state);
