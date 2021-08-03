@@ -1,4 +1,6 @@
 const Sequelize = require("sequelize");
+const pg = require("pg");
+pg.defaults.ssl = true;
 
 const db = new Sequelize(
   process.env.DATABASE_URL ||
