@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
 import { Box, Typography, Button, makeStyles } from "@material-ui/core";
 import { login, register } from "./store/utils/thunkCreators";
 import { Login } from "./components/Auth/Login";
