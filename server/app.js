@@ -67,4 +67,4 @@ app.use(function (err, req, res, next) {
   res.json({ error: err });
 });
 
-module.exports = { app, sessionStore };
+module.exports = { app, sessionStore }
