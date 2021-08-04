@@ -40,11 +40,6 @@ app.use(function (req, res, next) {
   }
 });
 
-// app.use(express.static(path.join(__dirname, "build")));
-
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
 
 // require api routes here after I create them
 app.use("/auth", require("./routes/auth"));
