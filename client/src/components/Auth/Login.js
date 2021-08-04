@@ -7,7 +7,7 @@ export const Login = ({ classes }) => {
       <Box>
         <FormControl className={classes.formField} margin="normal" required>
           <TextField
-            aria-label="e-mail address"
+            aria-label="Username"
             label="Username"
             name="username"
             type="text"
