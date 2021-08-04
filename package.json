@@ -1,16 +1,14 @@
 {
-  "name": "chat_app",
-  "version": "1.0.0",
-  "main": "server.js",
   "engines": {
     "node": "16.6.0",
     "npm": "7.19.1"
   },
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm start --prefix client\"",
-    "start": "concurrently \"npm start --prefix server\" \"npm start --prefix client\"",
+    "start": "concurrently \"npm run build --prefix client\" \"npm start --prefix server\"",
+    "deploy": "concurrently \"npm run build --prefix client\" \"npm start --prefix server\"",
     "build": "npm run build --prefix client",
-    "heroku-postbuild": "npm install && cd client && npm install --only-dev && cd ../server && npm install --only-dev && npm install && npm run build"
+    "heroku-postbuild": "npm install && cd client && npm install --only-dev && cd ../server && npm install --only-dev"
   },
   "dependencies": {
     "concurrently": "^6.2.0"
