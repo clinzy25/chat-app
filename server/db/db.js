@@ -4,18 +4,20 @@ pg.defaults.ssl = true;
 
 const db = new Sequelize(
   process.env.DATABASE_URL ||
-    "postgres://postgres:8150@localhost:5432/messenger",
+    "postgres://a4employee:8451@localhost:5432/messenger",
   {
     logging: false,
     dialect: "postgres",
     ssl: true,
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
+      ssl: process.env.DATABASE_URL
+        ? {
+            require: true,
+            rejectUnauthorized: false,
+          }
+        : false,
     },
   }
 );
 
-module.exports = db
+module.exports = db;
