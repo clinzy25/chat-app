@@ -1,35 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { fetchUser } from "./store/utils/thunkCreators";
-import Auth from "./Auth.js";
-import { Home, SnackbarError } from "./components";
+import React, { useEffect, useState } from 'react'
+import { Route, Switch } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUser } from './store/utils/thunkCreators'
+import Auth from './Auth.js'
+import { Home, SnackbarError } from './components'
 
-const Routes = (props) => {
-  const { user, fetchUser } = props;
-  const [errorMessage, setErrorMessage] = useState("");
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
+const Routes = () => {
+  const { user } = useSelector((state) => state)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [snackBarOpen, setSnackBarOpen] = useState(false)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-
-  useEffect(() => {
+  const handleUserError = () => {
     if (user.error) {
       // check to make sure error is what we expect, in case we get an unexpected server error object
-      if (typeof user.error === "string") {
-        setErrorMessage(user.error);
+      if (typeof user.error === 'string') {
+        setErrorMessage(user.error)
       } else {
-        setErrorMessage("Internal Server Error. Please try again");
+        setErrorMessage('Internal Server Error. Please try again')
       }
-      setSnackBarOpen(true);
+      setSnackBarOpen(true)
     }
-  }, [user.error]);
-
-  if (props.user.isFetchingUser) {
-    return <div>Loading...</div>;
   }
 
+  useEffect(() => {
+    dispatch(fetchUser())
+  }, [fetchUser])
+
+  useEffect(() => {
+    handleUserError()
+  }, [user.error])
+
+  if (user.isFetchingUser) {
+    return <div>Loading...</div>
+  }
   return (
     <>
       {snackBarOpen && (
@@ -41,29 +45,11 @@ const Routes = (props) => {
       )}
       <Switch>
         <Route path="/auth" component={Auth} />
-        <Route
-          exact
-          path="/"
-          render={(props) => (props.user?.id ? <Home /> : <Auth />)}
-        />
+        <Route exact path="/" component={user?.id ? Home : Auth} />
         <Route path="/home" component={Home} />
       </Switch>
     </>
-  );
-};
+  )
+}
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchUser() {
-      dispatch(fetchUser());
-    },
-  };
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Routes));
+export default Routes
