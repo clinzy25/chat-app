@@ -1,36 +1,36 @@
 // ACTIONS
 
-const GET_USER = "GET_USER";
-const SET_FETCHING_STATUS = "SET_FETCHING_STATUS";
+const GET_USER = 'GET_USER'
+const SET_FETCHING_STATUS = 'SET_FETCHING_STATUS'
 
 // ACTION CREATORS
 
 export const gotUser = (user) => {
   return {
     type: GET_USER,
-    user
-  };
-};
+    user,
+  }
+}
 
 export const setFetchingStatus = (isFetching) => ({
   type: SET_FETCHING_STATUS,
-  isFetching
-});
+  isFetching,
+})
 
 // REDUCER
 
 const reducer = (state = { isFetching: true }, action) => {
   switch (action.type) {
     case GET_USER:
-      return action.user;
+      return { ...state, user: action.user, isFetching: false }
     case SET_FETCHING_STATUS:
       return {
         ...state,
-        isFetching: action.isFetching
-      };
+        isFetching: action.isFetching,
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducer;
+export default reducer

@@ -6,9 +6,10 @@ import Auth from './Auth.js'
 import { Home, SnackbarError } from './components'
 
 const Routes = () => {
-  const { user } = useSelector((state) => state)
+  const { user, isFetching } = useSelector((state) => state.user)
   const [errorMessage, setErrorMessage] = useState('')
   const [snackBarOpen, setSnackBarOpen] = useState(false)
+
   const dispatch = useDispatch()
 
   const handleUserError = () => {
@@ -25,13 +26,13 @@ const Routes = () => {
 
   useEffect(() => {
     dispatch(fetchUser())
-  }, [fetchUser]) // eslint-disable-line
+  }, []) // eslint-disable-line
 
   useEffect(() => {
-    handleUserError()
-  }, [user.error]) // eslint-disable-line
+    user?.error && handleUserError()
+  }, [user]) // eslint-disable-line
 
-  if (user.isFetchingUser) {
+  if (isFetching) {
     return <div>Loading...</div>
   }
   return (
@@ -44,9 +45,8 @@ const Routes = () => {
         />
       )}
       <Switch>
-        <Route path="/auth" component={Auth} />
         <Route exact path="/" component={user?.id ? Home : Auth} />
-        <Route path="/home" component={Home} />
+        <Route path="/auth" component={user?.id ? Home : Auth} />
       </Switch>
     </>
   )

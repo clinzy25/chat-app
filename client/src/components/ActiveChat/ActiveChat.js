@@ -37,7 +37,7 @@ const ActiveChat = () => {
 
   return (
     <Box className={classes.root}>
-      {conversation.otherUser && (
+      {conversation.otherUser ? (
         <>
           <Header
             username={conversation.otherUser.username}
@@ -56,6 +56,12 @@ const ActiveChat = () => {
             />
           </Box>
         </>
+      ) : (
+        <Box className={classes.chatContainer}>
+          <p className={classes.msg}>
+            Select a conversation from the sidebar or search users
+          </p>
+        </Box>
       )}
     </Box>
   )

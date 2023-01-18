@@ -121,65 +121,71 @@ const Auth = () => {
   }
 
   if (user.id) {
-    return <Redirect to="/home" />
+    return <Redirect to="/" />
   }
   return (
-    <Box className={classes.root} container justify="center">
-      <div className={classes.bg}>
-        <img
-          className={classes.speechBubble}
-          src="./assets/icons/bubble.svg"
-          alt=""
-        />
-        <Typography className={classes.converse} style={{ fontSize: '2.5rem' }}>
-          Converse with anyone in any language
-        </Typography>
-      </div>
-
-      <Box className={classes.loginOrRegister}>
-        <Typography style={{ fontSize: '1.3rem' }} className={classes.prompt}>
-          {authType === 'Signup'
-            ? 'Already have an account?'
-            : "Don't have an account?"}
-        </Typography>
-        <Button
-          style={{ fontSize: '1.3rem' }}
-          className={classes.promptBtn}
-          onClick={() => {
-            if (authType === 'Signup') {
-              setAuthType('Login')
-            }
-            if (authType === 'Login') {
-              setAuthType('Signup')
-            }
-          }}
-        >
-          {authType === 'Signup' ? 'Login' : 'Create Account'}
-        </Button>
-      </Box>
-      <Box className={classes.formContainer}>
-        <form
-          className={classes.form}
-          onSubmit={authType === 'Signup' ? handleRegister : handleLogin}
-        >
+    <>
+      <Redirect to="/auth" />
+      <Box className={classes.root} container justify="center">
+        <div className={classes.bg}>
+          <img
+            className={classes.speechBubble}
+            src="./assets/icons/bubble.svg"
+            alt=""
+          />
           <Typography
-            style={{
-              fontSize: '2.5rem',
-              fontWeight: '700',
-              whiteSpace: 'nowrap',
+            className={classes.converse}
+            style={{ fontSize: '2.5rem' }}
+          >
+            Converse with anyone in any language
+          </Typography>
+        </div>
+
+        <Box className={classes.loginOrRegister}>
+          <Typography style={{ fontSize: '1.3rem' }} className={classes.prompt}>
+            {authType === 'Signup'
+              ? 'Already have an account?'
+              : "Don't have an account?"}
+          </Typography>
+          <Button
+            style={{ fontSize: '1.3rem' }}
+            className={classes.promptBtn}
+            onClick={() => {
+              if (authType === 'Signup') {
+                setAuthType('Login')
+              }
+              if (authType === 'Login') {
+                setAuthType('Signup')
+              }
             }}
           >
-            {authType === 'Signup' ? 'Create an account.' : 'Welcome back!'}
-          </Typography>
-          {/* Show login or signup components dynamically */}
-          {authType === 'Signup' ? (
-            <Signup formErrorMessage={formErrorMessage} classes={classes} />
-          ) : (
-            <Login classes={classes} />
-          )}
-        </form>
+            {authType === 'Signup' ? 'Login' : 'Create Account'}
+          </Button>
+        </Box>
+        <Box className={classes.formContainer}>
+          <form
+            className={classes.form}
+            onSubmit={authType === 'Signup' ? handleRegister : handleLogin}
+          >
+            <Typography
+              style={{
+                fontSize: '2.5rem',
+                fontWeight: '700',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {authType === 'Signup' ? 'Create an account.' : 'Welcome back!'}
+            </Typography>
+            {/* Show login or signup components dynamically */}
+            {authType === 'Signup' ? (
+              <Signup formErrorMessage={formErrorMessage} classes={classes} />
+            ) : (
+              <Login classes={classes} />
+            )}
+          </form>
+        </Box>
       </Box>
-    </Box>
+    </>
   )
 }
 
