@@ -4,8 +4,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser } from './store/utils/thunkCreators'
 import Auth from './Auth.js'
 import { Home, SnackbarError } from './components'
+import { makeStyles } from '@material-ui/core'
+import Loader from './components/Loader'
+
+const useStyles = makeStyles(() => ({
+  loading: {
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+}))
 
 const Routes = () => {
+  const classes = useStyles()
   const { user, isFetching } = useSelector((state) => state.user)
   const [errorMessage, setErrorMessage] = useState('')
   const [snackBarOpen, setSnackBarOpen] = useState(false)
@@ -33,7 +46,11 @@ const Routes = () => {
   }, [user]) // eslint-disable-line
 
   if (isFetching) {
-    return <div>Loading...</div>
+    return (
+      <div className={classes.loading}>
+        <Loader />
+      </div>
+    )
   }
   return (
     <>
