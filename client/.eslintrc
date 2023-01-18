@@ -1,0 +1,13 @@
+{
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "requireConfigFile": false,
+    "rules": {
+      "react-hooks/exhaustive-deps": "off"
+    },
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  }
+}
