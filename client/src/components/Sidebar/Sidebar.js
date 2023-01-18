@@ -1,27 +1,27 @@
-import React from "react";
-import { Box, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { useSelector } from "react-redux";
-import { Search, Chat, CurrentUser } from "./index.js";
+import React from 'react'
+import { Box, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { useSelector } from 'react-redux'
+import { Search, Chat, CurrentUser } from './index.js'
 
 const useStyles = makeStyles(() => ({
   root: {
     paddingLeft: 21,
     paddingRight: 21,
-    flexGrow: 1
+    flexGrow: 1,
   },
   title: {
     fontSize: 20,
     letterSpacing: -0.29,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 32,
-    marginBottom: 15
-  }
-}));
+    marginBottom: 15,
+  },
+}))
 
 const Sidebar = ({ handleChange, searchTerm }) => {
-  const classes = useStyles();
-  const conversations = useSelector((state) => state.conversations) || [];
+  const classes = useStyles()
+  const conversations = useSelector((state) => state.conversations) || []
 
   return (
     <Box className={classes.root}>
@@ -38,11 +38,10 @@ const Sidebar = ({ handleChange, searchTerm }) => {
               conversation={conversation}
               key={conversation.otherUser.username}
             />
-          );
+          )
         })}
     </Box>
-  );
-};
+  )
+}
 
-
-export default Sidebar;
+export default Sidebar
