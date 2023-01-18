@@ -20,7 +20,6 @@ const Home = () => {
   const dispatch = useDispatch()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-
   const handleLogout = () => {
     dispatch(logout(user.id))
     dispatch(clearOnLogout())
@@ -32,7 +31,7 @@ const Home = () => {
 
   useEffect(() => {
     isLoggedIn && dispatch(fetchConversations({ user }))
-  }, [isLoggedIn])
+  }, [isLoggedIn]) // eslint-disable-line
 
   if (!user.id) {
     return <Redirect to="/auth" />

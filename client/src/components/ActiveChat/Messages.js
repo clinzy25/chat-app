@@ -32,7 +32,7 @@ const Messages = ({ messages, otherUser, userId }) => {
 
   useEffect(() => {
     getLastReadMessage()
-  }, [messages])
+  }, [messages]) // eslint-disable-line
 
   return (
     <Box>

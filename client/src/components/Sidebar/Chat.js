@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Box } from '@material-ui/core'
 import { BadgeAvatar, ChatContent } from '../Sidebar'
 import { makeStyles } from '@material-ui/core/styles'

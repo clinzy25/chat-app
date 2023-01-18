@@ -25,11 +25,11 @@ const Routes = () => {
 
   useEffect(() => {
     dispatch(fetchUser())
-  }, [fetchUser])
+  }, [fetchUser]) // eslint-disable-line
 
   useEffect(() => {
     handleUserError()
-  }, [user.error])
+  }, [user.error]) // eslint-disable-line
 
   if (user.isFetchingUser) {
     return <div>Loading...</div>

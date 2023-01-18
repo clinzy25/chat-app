@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { SenderBubble } from '../ActiveChat'
 
 const useStyles = makeStyles((theme) => ({
   root: {
