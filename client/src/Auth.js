@@ -126,7 +126,7 @@ const Auth = () => {
   return (
     <>
       <Redirect to="/auth" />
-      <Box className={classes.root} container justify="center">
+      <Box className={classes.root} container="true" justify="center">
         <div className={classes.bg}>
           <img
             className={classes.speechBubble}

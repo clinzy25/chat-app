@@ -32,7 +32,7 @@ const UserAvatar = ({ sidebar, username, photoUrl, online }) => {
         classes={{ badge: `${classes.badge} ${online && classes.online}` }}
         variant="dot"
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        overlap="circle"
+        overlap="circular"
       >
         <Avatar
           alt={username}
