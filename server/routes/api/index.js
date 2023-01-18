@@ -1,14 +1,14 @@
-const router = require("express").Router();
+const router = require('express').Router()
 
-router.use("/messages", require("./messages"));
-router.use("/conversations", require("./conversations"));
-router.use("/conversationsPost", require("./conversationsPost"));
-router.use("/users", require("./users"));
+router.use('/messages', require('./messages'))
+router.use('/conversations', require('./conversations'))
+router.use('/conversationsPost', require('./conversationsPost'))
+router.use('/users', require('./users'))
 
 router.use((req, res, next) => {
-  const error = new Error("Not Found");
-  error.status = 404;
-  next(error);
-});
+  const error = new Error('Not Found')
+  error.status = 404
+  next(error)
+})
 
-module.exports = router;
+module.exports = router

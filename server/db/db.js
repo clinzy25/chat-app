@@ -1,13 +1,13 @@
-const Sequelize = require("sequelize");
-const pg = require("pg");
-pg.defaults.ssl = true;
+const Sequelize = require('sequelize')
+const pg = require('pg')
+pg.defaults.ssl = true
 
 const db = new Sequelize(
   process.env.DATABASE_URL ||
-    "postgres://a4employee:8451@localhost:5432/messenger",
+    'postgres://a4employee:8451@localhost:5432/messenger',
   {
     logging: false,
-    dialect: "postgres",
+    dialect: 'postgres',
     ssl: true,
     dialectOptions: {
       ssl: process.env.DATABASE_URL
@@ -18,6 +18,6 @@ const db = new Sequelize(
         : false,
     },
   }
-);
+)
 
-module.exports = db;
+module.exports = db

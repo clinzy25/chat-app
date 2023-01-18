@@ -1,12 +1,12 @@
-const router = require("express").Router();
-const { Message } = require("../../db/models");
+const router = require('express').Router()
+const { Message } = require('../../db/models')
 
-router.put("/", async (req, res, next) => {
+router.put('/', async (req, res, next) => {
   try {
     if (!req.user) {
-      return res.sendStatus(401);
+      return res.sendStatus(401)
     }
-    const { conversation, otherUserId } = req.body;
+    const { conversation, otherUserId } = req.body
     const messages = await Message.update(
       { read: true },
       {
@@ -15,11 +15,11 @@ router.put("/", async (req, res, next) => {
           senderId: otherUserId,
         },
       }
-    );
-    res.json(messages);
+    )
+    res.json(messages)
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
-module.exports = router;
+module.exports = router
