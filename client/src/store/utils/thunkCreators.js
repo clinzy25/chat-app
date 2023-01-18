@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../api";
 import socket from "../../socket";
 import {
   gotConversations,
@@ -13,7 +13,7 @@ import { gotUser, setFetchingStatus } from "../user";
 export const fetchUser = () => async (dispatch) => {
   dispatch(setFetchingStatus(true));
   try {
-    const { data } = await axios.get("/auth/user");
+    const { data } = await api.get("/auth/user");
     dispatch(gotUser(data));
   } catch (error) {
     console.error(error);
@@ -24,7 +24,7 @@ export const fetchUser = () => async (dispatch) => {
 
 export const register = (credentials) => async (dispatch) => {
   try {
-    const { data } = await axios.post("/auth/register", credentials);
+    const { data } = await api.post("/auth/register", credentials);
     dispatch(gotUser(data));
     window.location.reload();
   } catch (error) {
@@ -35,9 +35,8 @@ export const register = (credentials) => async (dispatch) => {
 
 export const login = (credentials) => async (dispatch) => {
   try {
-    const { data } = await axios.post("/auth/login", credentials);
+    const { data } = await api.post("/auth/login", credentials);
     dispatch(gotUser(data));
-    window.location.reload();
   } catch (error) {
     console.error(error);
     dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
@@ -46,7 +45,7 @@ export const login = (credentials) => async (dispatch) => {
 
 export const logout = (id) => async (dispatch) => {
   try {
-    await axios.delete("/auth/logout");
+    await api.delete("/auth/logout");
     dispatch(gotUser({}));
   } catch (error) {
     console.error(error);
@@ -55,9 +54,9 @@ export const logout = (id) => async (dispatch) => {
 
 // CONVERSATIONS THUNK CREATORS
 
-export const fetchConversations = () => async (dispatch) => {
+export const fetchConversations = (user) => async (dispatch) => {
   try {
-    const { data } = await axios.get("/api/conversations");
+    const { data } = await api.get("/api/conversations", user);
     dispatch(gotConversations(data));
   } catch (error) {
     console.error(error);
@@ -65,13 +64,13 @@ export const fetchConversations = () => async (dispatch) => {
 };
 
 /**
- * 
- * @param {*} body 
- * @returns 
+ *
+ * @param {*} body
+ * @returns
  */
 export const updateReadStatus = (body) => async (dispatch) => {
   try {
-    const data = await axios.put("/api/conversationsPost", body);
+    const data = await api.put("/api/conversationsPost", body);
     return data;
   } catch (error) {
     console.error(error);
@@ -80,7 +79,7 @@ export const updateReadStatus = (body) => async (dispatch) => {
 
 const saveMessage = async (body) => {
   try {
-    const { data } = await axios.post("/api/messages", body);
+    const { data } = await api.post("/api/messages", body);
     return data;
   } catch (error) {
     console.error(error);
@@ -114,7 +113,7 @@ export const postMessage = (body) => async (dispatch) => {
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`/api/users/${searchTerm}`);
+    const { data } = await api.get(`/api/users/${searchTerm}`);
     dispatch(setSearchedUsers(data));
   } catch (error) {
     console.error(error);

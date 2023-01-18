@@ -30,8 +30,8 @@ const Home = () => {
   }, [user.id]);
 
   useEffect(() => {
-    dispatch(fetchConversations());
-  }, [dispatch]);
+    isLoggedIn && dispatch(fetchConversations({ user }));
+  }, [isLoggedIn]);
 
   const handleLogout = async () => {
     await dispatch(logout(user.id));

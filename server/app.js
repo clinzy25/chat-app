@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const db = require("./db");
+const cors = require("cors");
 const { User } = require("./db/models");
 // create store for sessions to persist in database
 const sessionStore = new SequelizeStore({ db });
@@ -20,6 +21,7 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "build")));
 app.use(cookieParser());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.use(function (req, res, next) {
   const token = req.cookies.token;
@@ -39,7 +41,6 @@ app.use(function (req, res, next) {
     return next();
   }
 });
-
 
 // require api routes here after I create them
 app.use("/auth", require("./routes/auth"));
@@ -65,4 +66,4 @@ app.use(function (err, req, res, next) {
   res.json({ error: err });
 });
 
-module.exports = { app, sessionStore }
+module.exports = { app, sessionStore };

@@ -5,6 +5,7 @@ specifiers:
   chai-http: ^4.3.0
   connect-session-sequelize: ^7.1.5
   cookie-parser: ^1.4.6
+  cors: ^2.8.5
   dotenv: ^16.0.3
   express: ^4.18.2
   express-http-proxy: ^1.6.3
@@ -22,6 +23,7 @@ specifiers:
 dependencies:
   connect-session-sequelize: 7.1.5_sequelize@6.28.0
   cookie-parser: 1.4.6
+  cors: 2.8.5
   dotenv: 16.0.3
   express: 4.18.2
   express-http-proxy: 1.6.3
