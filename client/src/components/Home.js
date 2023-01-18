@@ -27,7 +27,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(fetchConversations({ user }))
   }, []) // eslint-disable-line
-
+  
   return (
     <>
       <Redirect to="/" />

@@ -1,5 +1,3 @@
-#### View at https://chat-app01010.herokuapp.com/
-
 # Messenger
 
 A one-to-one realtime chat app.
@@ -17,6 +15,7 @@ npm install
 // seed the database
 npm run seed
 
+// run development server
 npm run dev
 ```
 
