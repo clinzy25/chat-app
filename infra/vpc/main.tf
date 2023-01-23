@@ -18,9 +18,10 @@ module "vpc" {
   cidr = "10.0.0.0/24"
 
   azs              = ["${local.region}a", "${local.region}b"]
-  private_subnets  = ["10.0.0.64/26", "10.0.0.128/26"]
-  public_subnets   = ["10.0.0.16/28", "10.0.0.0/28"]
-  database_subnets = ["10.0.0.32/30", "10.0.0.36/30"]
+  private_subnets  = ["10.0.0.0/26", "10.0.0.64/26"]
+  public_subnets   = ["10.0.0.128/28", "10.0.0.144/28"]
+  database_subnets = ["10.0.0.160/28", "10.0.0.176/28"]
+  # 10.0.0.191/26 available
 
   private_subnet_names = ["private-${local.project}-subnet-1", "private-${local.project}-subnet-2"]
   public_subnet_names  = ["public-${local.project}-subnet-1", "public-${local.project}-subnet-2"]
