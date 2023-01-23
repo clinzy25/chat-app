@@ -1,7 +1,8 @@
 
 locals {
-  name   = "main-vpc"
-  region = "us-west-2"
+  name    = "chat-app-vpc"
+  project = "chat-app"
+  region  = "us-west-2"
 
   tags = {
     Example    = local.name
@@ -16,14 +17,14 @@ module "vpc" {
   name = local.name
   cidr = "10.0.0.0/24"
 
-  azs                 = ["${local.region}a", "${local.region}b"]
-  private_subnets     = ["10.0.0.64/26", "10.0.0.128/26"]
-  public_subnets      = ["10.0.0.16/28", "10.0.0.0/28"]
+  azs             = ["${local.region}a", "${local.region}b"]
+  private_subnets = ["10.0.0.64/26", "10.0.0.128/26"]
+  public_subnets  = ["10.0.0.16/28", "10.0.0.0/28"]
 
-  private_subnet_names = ["private-subnet-main-1", "private-subnet-main-2"]
-  public_subnet_names = ["public-subnet-main-1", "public-subnet-main-2"]
+  private_subnet_names = ["private-${local.project}-subnet-1", "private-${local.project}-subnet-2"]
+  public_subnet_names  = ["public-${local.project}-subnet-1", "public-${local.project}-subnet-2"]
 
-  create_database_subnet_group = false
+  create_database_subnet_group = true
 
   manage_default_network_acl = true
   default_network_acl_tags   = { Name = "${local.name}-default" }
@@ -34,8 +35,8 @@ module "vpc" {
   manage_default_security_group = true
   default_security_group_tags   = { Name = "${local.name}-default" }
 
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  enable_dns_hostnames = false
+  enable_dns_support   = false
 
   enable_nat_gateway = false
   single_nat_gateway = false
