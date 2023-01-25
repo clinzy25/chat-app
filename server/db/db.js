@@ -3,9 +3,11 @@ const pg = require('pg')
 pg.defaults.ssl = true
 
 const db = new Sequelize(
-  'postgres://a4employee:8451@localhost:5432/messenger',
+  process.env.POSTGRES_DATABASE,
+  process.env.POSTGRES_USER,
+  process.env.POSTGRES_PASSWORD,
   {
-    logging: false,
+    host: process.env.POSTGRES_HOST,
     dialect: 'postgres',
     dialectOptions: {
       ssl: false,

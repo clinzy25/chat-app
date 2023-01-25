@@ -1,0 +1,38 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_DATABASE=messenger
+      - POSTGRES_USER=a4employee
+      - POSTGRES_PASSWORD=8451
+    ports:
+      - "5432:5432"
+    volumes: 
+      - db:/var/lib/postgresql/data
+  server:
+    build: server/
+    command: node ./bin/www
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - EXTERNAL_PORT=3001
+      - POSTGRES_USER=a4employee
+      - POSTGRES_PASSWORD=8451
+      - POSTGRES_DATABASE=messenger
+      - POSTGRES_HOST=host.docker.internal
+    links:
+      - db
+    depends_on:
+      - db
+  client:
+    build: client/
+    command: pnpm run build
+    network_mode: host
+    depends_on:
+      - server
+volumes:
+  db:
+    driver: local
