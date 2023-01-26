@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./bin/www",
-    "start": "set NODE_ENV=production&&node ./bin/www",
-    "debug": "nodemon  --inspect ./bin/www",
+    "dev": "nodemon ./src/bin/www",
+    "start": "set NODE_ENV=production&&node ./src/bin/www",
+    "debug": "nodemon  --inspect ./src/bin/www",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000",
-    "seed": "node db/seed.js"
+    "seed": "node ./src.db/seed.js"
   },
   "dependencies": {
     "connect-session-sequelize": "^7.1.5",

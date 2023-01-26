@@ -1,7 +1,8 @@
 FROM node:18
-WORKDIR /src
 RUN npm install -g pnpm
 RUN npm install -g nodemon
-ADD . .
-RUN pnpm i
+WORKDIR /src
 CMD pnpm dev
+ADD ./package.json /src
+RUN pnpm i
+ADD ./src /src
