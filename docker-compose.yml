@@ -5,10 +5,10 @@ services:
     restart: always
     environment:
       - POSTGRES_DATABASE=messenger
-      - POSTGRES_USER=a4employee
-      - POSTGRES_PASSWORD=8451
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     ports:
-      - "5432:5432"
+      - "3002:3002"
     volumes: 
       - db:/var/lib/postgresql/data
   server:
@@ -19,8 +19,8 @@ services:
     environment:
       - NODE_ENV=production
       - EXTERNAL_PORT=3001
-      - POSTGRES_USER=a4employee
-      - POSTGRES_PASSWORD=8451
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DATABASE=messenger
       - POSTGRES_HOST=host.docker.internal
     links:

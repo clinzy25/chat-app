@@ -3,4 +3,4 @@ WORKDIR /server
 RUN npm install -g pnpm
 ADD . .
 RUN pnpm i
-CMD [ "node", "./bin/www" ]
+CMD [ "nodemon", "./bin/www" ]
