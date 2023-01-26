@@ -1,6 +1,7 @@
 FROM node:18
-WORKDIR /server
+WORKDIR /src
 RUN npm install -g pnpm
+RUN npm install -g nodemon
 ADD . .
 RUN pnpm i
-CMD [ "nodemon", "./bin/www" ]
+CMD pnpm dev

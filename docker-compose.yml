@@ -11,13 +11,14 @@ services:
       - "3002:3002"
     volumes: 
       - db:/var/lib/postgresql/data
+    logging:
+      driver: none
   server:
     build: server/
-    command: node ./bin/www
+    command: pnpm dev
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=production
       - EXTERNAL_PORT=3001
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -27,12 +28,22 @@ services:
       - db
     depends_on:
       - db
+    volumes:
+      - ./server:/src
+      - /server/src/node_modules/
   client:
     build: client/
-    command: pnpm run build
-    network_mode: host
+    command: pnpm start
+    # network_mode: host
     depends_on:
       - server
+    ports:
+      - "3000:3000"
+    environment:
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./client:/src
+      - /client/src/node_modules/
 volumes:
   db:
     driver: local

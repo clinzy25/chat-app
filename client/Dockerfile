@@ -1,8 +1,8 @@
 FROM node:18
 RUN npm install -g pnpm
-WORKDIR /client
-ENV PATH /client/node_modules/.bin:$PATH
-ADD ./package.json /client/
+WORKDIR /src
+EXPOSE 3000
+CMD pnpm start
+ADD ./package.json /src
 RUN pnpm i
-ADD . /client
-RUN pnpm run build
+ADD ./src /src

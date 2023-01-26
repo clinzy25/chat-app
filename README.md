@@ -15,6 +15,8 @@ A one-to-one realtime chat app.
 6. From project root, run `docker-compose up --build`
 7. Open `localhost:3001` in your browser
 
+*Subsequent app stop/starts can use `docker-compose up` and `docker-compose down`
+
 What am I looking at?
 
 Two docker containers with frontend and backend images respectively. You are connected to the dev RDS instance in a private IP via a bastion connection.
