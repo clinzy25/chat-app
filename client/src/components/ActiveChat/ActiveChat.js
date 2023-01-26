@@ -47,7 +47,7 @@ const ActiveChat = () => {
             <Messages
               messages={conversation.messages}
               otherUser={conversation.otherUser}
-              userId={user.id}
+              userId={user.user.id}
             />
             <Input
               otherUser={conversation.otherUser}
