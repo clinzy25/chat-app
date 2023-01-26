@@ -1,6 +1,4 @@
 const Sequelize = require('sequelize')
-const pg = require('pg')
-pg.defaults.ssl = true
 
 const db = new Sequelize(
   process.env.POSTGRES_DATABASE,
@@ -8,10 +6,8 @@ const db = new Sequelize(
   process.env.POSTGRES_PASSWORD,
   {
     host: process.env.POSTGRES_HOST,
+    port: 3002,
     dialect: 'postgres',
-    dialectOptions: {
-      ssl: false,
-    },
   }
 )
 

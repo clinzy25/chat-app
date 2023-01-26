@@ -1,18 +1,5 @@
 version: "3"
 services:
-  db:
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_DATABASE=messenger
-      - POSTGRES_USER=${DATABASE_USERNAME}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-    ports:
-      - "3002:3002"
-    logging:
-      driver: none
-    volumes: 
-      - db:/var/lib/postgresql/data
   server:
     build: server/
     restart: always
@@ -20,15 +7,11 @@ services:
       - EXTERNAL_PORT=3001
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DATABASE=messenger
+      - POSTGRES_DATABASE=ChatAppDb
       - POSTGRES_HOST=host.docker.internal
     ports:
       - "3001:3001"
     command: pnpm dev
-    links:
-      - db
-    depends_on:
-      - db
     volumes:
       - ./server:/src
       - /server/src/node_modules/
@@ -45,6 +28,3 @@ services:
     volumes:
       - ./client:/src
       - /client/src/node_modules/
-volumes:
-  db:
-    driver: local
