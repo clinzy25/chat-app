@@ -12,10 +12,10 @@ A one-to-one realtime chat app.
 4. Run the following command to open an ssh tunnel to RDS through a bastion server.
   `ssh -i rds-bastion.pem -NL 3002:[RDS_PRIVATE_IP]:5432 ec2-user@54.190.136.58 -v`
 5. Ensure Docker and docker-compose installed and configured
-6. From project root, run `docker-compose up --build`
-7. Open `localhost:3001` in your browser
+6. From project root, run `docker-compose -f docker-compose.dev.yml up --build`
+7. Open `localhost:3000` in your browser
 
-*Subsequent app stop/starts can use `docker-compose up` and `docker-compose down`
+*Subsequent app stop/starts can use `docker-compose -f docker-compose.dev.yml up` and `docker-compose -f docker-compose.dev.yml down`
 
 What am I looking at?
 
