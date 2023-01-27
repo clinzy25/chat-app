@@ -1,0 +1,7 @@
+FROM node:alpine
+RUN npm install -g pnpm
+WORKDIR /app
+CMD pnpm start
+ADD pnpm-lock.yaml package.json ./
+RUN pnpm i --production
+ADD . .

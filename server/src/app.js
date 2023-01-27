@@ -38,7 +38,12 @@ app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'build')))
 app.use(cookieParser())
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
+app.use(
+  cors({
+    credentials: true,
+    origin: ['http://localhost:3000', 'http://localhost:4200'],
+  })
+)
 app.use(checkToken)
 
 app.use('/auth', require('./routes/auth'))

@@ -1,0 +1,44 @@
+version: "3"
+services:
+  nginx:
+    depends_on:
+      - server
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./nginx
+    ports:
+      - "4200:80"
+  api:
+    build: 
+      dockerfile: Dockerfile.prod
+      context: ./server
+    restart: always
+    environment:
+      - EXTERNAL_PORT=3001
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DATABASE=ChatAppDb
+      - POSTGRES_HOST=host.docker.internal
+    ports:
+      - "3001:3001"
+    command: pnpm dev
+    volumes:
+      - ./server:/app
+      - /server/app/node_modules/
+  client:
+    build: 
+      dockerfile: Dockerfile.prod
+      context: ./client
+    restart: always
+    environment:
+      - WATCHPACK_POLLING=true
+    ports:
+      - "3000:3000"
+    command: pnpm start
+    depends_on:
+      - server
+    volumes:
+      - ./client:/app
+      - /client/app/node_modules/
