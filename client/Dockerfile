@@ -1,8 +1,8 @@
 FROM node:18
 RUN npm install -g pnpm
-WORKDIR /src
-EXPOSE 3000
+WORKDIR /app
 CMD pnpm start
-ADD ./package.json /src
+ADD ./package.json .
 RUN pnpm i
-ADD ./src /src
+ADD ./src .
+EXPOSE 3000

@@ -43,9 +43,7 @@ app.use(checkToken)
 
 app.use('/auth', require('./routes/auth'))
 app.use('/api', require('./routes/api'))
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
+app.get('/*', (req, res) => res.json({ status: 'Lookin goood' }))
 
 app.use(function (req, res, next) {
   next(createError(404))
