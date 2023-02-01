@@ -5,10 +5,13 @@ services:
     restart: always
     environment:
       - EXTERNAL_PORT=3001
-      - POSTGRES_USER=${DATABASE_USERNAME}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DATABASE=ChatAppDb
-      - POSTGRES_HOST=host.docker.internal
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_HOST_DEV=${POSTGRES_HOST_DEV}
+      - POSTGRES_PORT_DEV=${POSTGRES_PORT_DEV}
+      - NODE_ENV=development
+      - SESSION_SECRET=${SESSION_SECRET}
     ports:
       - "3001:3001"
     command: pnpm dev

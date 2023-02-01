@@ -1,22 +1,26 @@
 version: "3"
 services:
   api:
+    image: ${DOCKER_REGISTRY}/backend
     build: 
       dockerfile: Dockerfile.prod
       context: ./server
-    restart: always
     environment:
       - EXTERNAL_PORT=3001
-      - POSTGRES_USER=${DATABASE_USERNAME}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DATABASE=ChatAppDb
-      - POSTGRES_HOST=host.docker.internal
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_HOST_PROD=${POSTGRES_HOST_PROD}
+      - POSTGRES_PORT_PROD=${POSTGRES_PORT_PROD}
+      - NODE_ENV=production
+      - SESSION_SECRET=${SESSION_SECRET}
     ports:
       - "3001:3001"
     volumes:
       - ./server:/app
       - /server/app/node_modules/
   client:
+    image: ${DOCKER_REGISTRY}/frontend
     build: 
       dockerfile: Dockerfile.prod
       context: ./client

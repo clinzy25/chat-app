@@ -1,4 +1,3 @@
-
 locals {
   name    = "chat-app-vpc"
   project = "chat-app"

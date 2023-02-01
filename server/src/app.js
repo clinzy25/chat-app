@@ -11,6 +11,7 @@ const { User } = require('./db/models')
 const sessionStore = new SequelizeStore({ db })
 const cookieParser = require('cookie-parser')
 const { json, urlencoded } = express
+require('dotenv').config({ path: '../.env' })
 
 const app = express()
 
