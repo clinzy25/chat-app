@@ -5,7 +5,10 @@ locals {
 }
 
 data "aws_vpc" "chat_app_vpc" {
-  id = "vpc-05da0247593eff8e0"
+  filter {
+    name   = "tag:Name"
+    values = ["chat-app-vpc"] # insert values here
+  }
 }
 
 data "aws_subnet" "bastion_subnet" {
@@ -35,7 +38,7 @@ resource "aws_db_instance" "chat_app_db" {
   allocated_storage               = 20
   max_allocated_storage           = 22
   final_snapshot_identifier       = "chat-app-db-snapshot"
-  db_subnet_group_name            = "chat-app-vpc"
+  db_subnet_group_name            = "rds-subnet-group"
   skip_final_snapshot             = false
   performance_insights_enabled    = true
   multi_az                        = true
