@@ -1,58 +1,94 @@
 locals {
-  name    = "chat-app-vpc"
-  project = "chat-app"
-  region  = "us-west-2"
+  name             = "chat-app-vpc"
+  project          = "chat-app"
+  region           = "us-west-2"
+  azs              = ["${local.region}a", "${local.region}b"]
+  database_subnets = ["10.0.0.0/20", "10.0.16.0/20"]
+  public_subnets   = ["10.0.32.0/20", "10.0.48.0/20"]
+  private_subnets  = ["10.0.64.0/20", "10.0.80.0/20"]
 
   tags = {
-    Example    = local.name
-    GithubRepo = "terraform-aws-vpc"
-    GithubOrg  = "terraform-aws-modules"
+    Example = local.name
   }
 }
 
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+resource "aws_vpc" "chat_app_vpc" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+  tags = {
+    Name = local.name
+  }
+}
 
-  name = local.name
-  cidr = "10.0.0.0/22"
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.chat_app_vpc.id
+}
 
-  azs              = ["${local.region}a", "${local.region}b"]
-  database_subnets  = ["10.0.0.0/26", "10.0.0.64/26"] # 128 IPs
-  public_subnets   = ["10.0.0.128/25", "10.0.1.0/25"] # 256 IPs
-  private_subnets = ["10.0.2.0/24", "10.0.3.0/24"] # 512 IPs
-  # 896 total IPs, 128 free
-  
-  private_subnet_names = ["private-1-${local.project}-subnet", "private-2-${local.project}-subnet"]
-  public_subnet_names  = ["public-1-${local.project}-subnet", "public-2-${local.project}-subnet"]
-  database_subnet_names  = ["db-1-${local.project}-subnet", "db-2-${local.project}-subnet"]
+resource "aws_subnet" "public_subnets" {
+  count                   = length(local.public_subnets)
+  vpc_id                  = aws_vpc.chat_app_vpc.id
+  cidr_block              = local.public_subnets[count.index]
+  availability_zone       = local.azs[count.index]
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "public-${count.index + 1}-${local.project}-subnet"
+  }
+}
 
-  create_database_subnet_group = true
+resource "aws_subnet" "private_subnets" {
+  count                   = length(local.private_subnets)
+  vpc_id                  = aws_vpc.chat_app_vpc.id
+  cidr_block              = local.private_subnets[count.index]
+  availability_zone       = local.azs[count.index]
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "private-${count.index + 1}-${local.project}-subnet"
+  }
+}
 
-  manage_default_network_acl = true
-  default_network_acl_tags   = { Name = "${local.name}-default" }
+resource "aws_subnet" "db_subnets" {
+  count                   = length(local.database_subnets)
+  vpc_id                  = aws_vpc.chat_app_vpc.id
+  cidr_block              = local.database_subnets[count.index]
+  availability_zone       = local.azs[count.index]
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "db-${count.index + 1}-${local.project}-subnet"
+  }
+}
 
-  manage_default_route_table = true
-  default_route_table_tags   = { Name = "${local.name}-default" }
+resource "aws_db_subnet_group" "rds_subnet_group" {
+  name       = "rds-subnet-group"
+  subnet_ids = aws_subnet.db_subnets.*.id
+}
 
-  manage_default_security_group = true
-  default_security_group_tags   = { Name = "${local.name}-default" }
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.chat_app_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+}
 
-  enable_dns_hostnames = false
-  enable_dns_support   = false
+resource "aws_route_table" "private_route_table" {
+  vpc_id = aws_vpc.chat_app_vpc.id
+}
 
-  enable_nat_gateway = false
-  single_nat_gateway = false
-  enable_vpn_gateway = false
+resource "aws_route_table_association" "public_rt_assoc" {
+  count          = length(local.public_subnets)
+  subnet_id      = element(aws_subnet.public_subnets.*.id, count.index)
+  route_table_id = aws_route_table.public_route_table.id
+}
 
-  enable_dhcp_options              = true
-  dhcp_options_domain_name         = "service.consul"
-  dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
+resource "aws_route_table_association" "private_rt_assoc" {
+  count          = length(local.private_subnets)
+  subnet_id      = element(aws_subnet.private_subnets.*.id, count.index)
+  route_table_id = aws_route_table.private_route_table.id
+}
 
-  # VPC Flow Logs (Cloudwatch log group and IAM role will be created)
-  enable_flow_log                      = true
-  create_flow_log_cloudwatch_log_group = true
-  create_flow_log_cloudwatch_iam_role  = true
-  flow_log_max_aggregation_interval    = 60
-
-  tags = local.tags
+resource "aws_route_table_association" "database_rt_assoc" {
+  count          = length(local.database_subnets)
+  subnet_id      = element(aws_subnet.db_subnets.*.id, count.index)
+  route_table_id = aws_route_table.private_route_table.id
 }

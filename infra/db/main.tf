@@ -8,17 +8,6 @@ data "aws_vpc" "chat_app_vpc" {
   id = "vpc-05da0247593eff8e0"
 }
 
-data "aws_subnets" "db_subnets" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.chat_app_vpc.id]
-  }
-  filter {
-    name   = "tag:Name"
-    values = ["*db*"] # insert values here
-  }
-}
-
 data "aws_subnet" "bastion_subnet" {
   filter {
     name   = "vpc-id"
@@ -35,11 +24,6 @@ resource "aws_kms_key" "db_key" {
   multi_region = true
 }
 
-resource "aws_db_subnet_group" "rds_subnet_group" {
-  name       = "rds-subnet-group"
-  subnet_ids = [for id in data.aws_subnets.db_subnets.ids : id]
-}
-
 resource "aws_db_instance" "chat_app_db" {
   identifier                      = "chat-app-db"
   db_name                         = "ChatAppDb"
@@ -51,7 +35,7 @@ resource "aws_db_instance" "chat_app_db" {
   allocated_storage               = 20
   max_allocated_storage           = 22
   final_snapshot_identifier       = "chat-app-db-snapshot"
-  db_subnet_group_name            = "rds-subnet-group"
+  db_subnet_group_name            = "chat-app-vpc"
   skip_final_snapshot             = false
   performance_insights_enabled    = true
   multi_az                        = true
