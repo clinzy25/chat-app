@@ -42,9 +42,10 @@ app.use(cookieParser())
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'http://localhost:4200'],
+    origin: ['http://localhost:3000', 'https://chat01.link'],
   })
 )
+
 app.use(checkToken)
 
 app.use('/auth', require('./routes/auth'))

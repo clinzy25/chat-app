@@ -6,7 +6,7 @@ const onlineUsers = require('../onlineUsers')
 const auth = require('socketio-auth')
 const { User } = require('../db/models')
 
-const port = normalizePort(process.env.PORT || '3001')
+const port = normalizePort(process.env.PORT || '80')
 app.set('port', port)
 
 const server = http.createServer(app)

@@ -1,9 +1,12 @@
 import axios from 'axios'
 
-const env = process.env.NODE_ENV
+const baseURL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.chat01.link'
+    : 'http://localhost:80'
 
 const api = axios.create({
-  baseURL: env === 'production' ? '/api' : 'http://localhost:3001',
+  baseURL,
   withCredentials: true,
 })
 

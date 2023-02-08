@@ -1,19 +1,19 @@
-version: "3"
+version: '3'
 services:
   server:
     build: server/
     restart: always
     environment:
-      - EXTERNAL_PORT=3001
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - EXTERNAL_PORT=80
+      - POSTGRES_USER_DEV=${POSTGRES_USER_DEV}
+      - POSTGRES_PASSWORD_DEV=${POSTGRES_PASSWORD_DEV}
       - POSTGRES_DATABASE=${POSTGRES_DATABASE}
       - POSTGRES_HOST_DEV=${POSTGRES_HOST_DEV}
       - POSTGRES_PORT_DEV=${POSTGRES_PORT_DEV}
       - NODE_ENV=development
       - SESSION_SECRET=${SESSION_SECRET}
     ports:
-      - "3001:3001"
+      - '80:80'
     command: pnpm dev
     volumes:
       - ./server:/app
@@ -24,7 +24,7 @@ services:
     environment:
       - WATCHPACK_POLLING=true
     ports:
-      - "3000:3000"
+      - '3000:3000'
     command: pnpm start
     depends_on:
       - server
