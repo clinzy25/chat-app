@@ -1,7 +1,8 @@
 locals {
-  project = "chat-app"
-  region  = "us-west-2"
-  ami     = "ami-06e85d4c3149db26a"
+  project       = "chat-app"
+  region        = "us-west-2"
+  ami           = "ami-06e85d4c3149db26a"
+  backend_sg_id = "sg-062a78c82cb628c90"
 }
 
 data "aws_vpc" "chat_app_vpc" {
@@ -20,6 +21,10 @@ data "aws_subnet" "bastion_subnet" {
     name   = "tag:Name"
     values = ["*public-1*"] # insert values here
   }
+}
+
+data "aws_security_group" "chat_app_backend_sg" {
+  id = local.backend_sg_id
 }
 
 resource "aws_kms_key" "db_key" {
@@ -45,7 +50,7 @@ resource "aws_db_instance" "chat_app_db" {
   performance_insights_kms_key_id = aws_kms_key.db_key.arn
   storage_encrypted               = true
   kms_key_id                      = aws_kms_key.db_key.arn
-  vpc_security_group_ids          = [aws_security_group.allow_bastion.id]
+  vpc_security_group_ids          = [aws_security_group.rds_sg.id]
 }
 
 resource "aws_security_group" "bastion" {
@@ -81,8 +86,8 @@ resource "aws_security_group" "bastion" {
   }
 }
 
-resource "aws_security_group" "allow_bastion" {
-  name        = "rds-allow-bastion"
+resource "aws_security_group" "rds_sg" {
+  name        = "chat-app-rds"
   description = "Allow bastion access"
   vpc_id      = data.aws_vpc.chat_app_vpc.id
 
@@ -93,13 +98,21 @@ resource "aws_security_group" "allow_bastion" {
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
   }
-  
+
   ingress {
     description     = "Inbound SSL from bastion"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Inbound from ecs backend"
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    security_groups = [data.aws_security_group.chat_app_backend_sg.id]
   }
 
   egress {
