@@ -34,7 +34,7 @@ resource "aws_db_instance" "chat_app_db" {
   engine_version                  = "13.7"
   instance_class                  = "db.t3.micro"
   username                        = "postgres"
-  password                        = "6zLPRL&7*%obmmb#&6T7N"
+  password                        = var.db_password
   allocated_storage               = 20
   max_allocated_storage           = 22
   final_snapshot_identifier       = "chat-app-db-snapshot"
@@ -58,7 +58,7 @@ resource "aws_security_group" "bastion" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["192.168.0.12/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -66,7 +66,7 @@ resource "aws_security_group" "bastion" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["192.168.0.12/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -77,7 +77,7 @@ resource "aws_security_group" "bastion" {
   }
 
   tags = {
-    Name = "db"
+    Name = local.project
   }
 }
 
@@ -87,7 +87,7 @@ resource "aws_security_group" "allow_bastion" {
   vpc_id      = data.aws_vpc.chat_app_vpc.id
 
   ingress {
-    description     = "Inbound postgres"
+    description     = "Inbound postgres from bastion"
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
@@ -95,7 +95,7 @@ resource "aws_security_group" "allow_bastion" {
   }
   
   ingress {
-    description     = "Inbound SSL"
+    description     = "Inbound SSL from bastion"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -110,8 +110,13 @@ resource "aws_security_group" "allow_bastion" {
   }
 
   tags = {
-    Name = "db"
+    Name = local.project
   }
+}
+
+resource "aws_key_pair" "bastion_key_pair" {
+  key_name   = "rds-bastion"
+  public_key = var.bastion_key_pair
 }
 
 resource "aws_instance" "rds_bastion_server" {
@@ -119,7 +124,7 @@ resource "aws_instance" "rds_bastion_server" {
   instance_type               = "t2.micro"
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.bastion.id]
-  key_name                    = "rds-bastion"
+  key_name                    = aws_key_pair.bastion_key_pair.key_name
   subnet_id                   = data.aws_subnet.bastion_subnet.id
 }
 

@@ -1,26 +1,47 @@
 # Messenger
 
-A one-to-one realtime chat app.
+A one-to-one realtime chat app. Not novel in functionality, but used as a cloud / ops test bed.
 
-## Running Application Locally
+# Running Application Locally
+You will create an AWS custom VPC, Postgres RDS instance and bastion server, then launch two docker containers for the client and the server, using the bastion as a secure tunnel into the RDS instance.
+### Prerequisites:
+  - Terraform
+  - Postgres
+  - Docker and docker-compose
+  - AWS configured
+  - Ok with very small AWS bill (<$5)
 
-1. Obtain from a system admin:
-  - the key pair and for the AWS RDS instance from a system admin
-  - your developer database credentials. System admin should create a new database user.
-2. Create a `.env` file in the root of the project, add your credentials in the format of `.env.sample`.
-3. `cd` into the directory containting the key
-4. Run the following command to open an ssh tunnel to RDS through a bastion server.
-  `ssh -i rds-bastion.pem -NL 3002:10.0.0.38:5432 ec2-user@44.238.0.216 -v`
-5. Ensure Docker and docker-compose installed and configured
-6. From project root, run `docker-compose -f docker-compose.dev.yml up --build`
-7. Open `localhost:3000` in your browser
+### 1. Create VPC in AWS
+  - `cd` into `infra/vpc`
+  - run `terraform init`
+  - run `terraform apply -auto-approve`
+### 2. Create RDS instance and bastion server in AWS
+  - `cd` into `infra/db`
+  - run `terraform init`
+  - `cd` into a directory where you can store a key and run `ssh-keygen -t rsa -m PEM` to create a key pair for the bastion
+  - create a file called `locals.auto.tfvars` in `infra/db`
+  - add the following environment variables in the format `env_name = "ssh-rsa xxxx..."`
+    - `bastion_key_pair` and assign it to the value of the key
+    - `db_password` and assign a master database password
+  - run `terraform apply -auto-approve`
+### 3. Create an SSH tunnel into RDS instance
+  - obtain the ip addresses of the newly created RDS database and the bastion instance
+  - `cd` into the directory containing the bastion key
+  - run `ssh -i rds-bastion.pem -NL 3002:{DATABASE_IP}:5432 ec2-user@{BASTION_IP} -v` replacing the values with the IP addresses
+
+*this creates a connection to the RDS instance using the bastion as a tunnel. The connection is exposed on port 3002 on your local machine
+### 4. Create your DB user and seed the database
+  - in a new terminal window, run `psql -h localhost -U postgres -d ChatAppDb -p 3002`
+  - when prompted, use the master database password you assigned in step 2
+  - run `CREATE USER {USERNAME} WITH ENCRYPTED PASSWORD {PASSWORD};` and keep these values for later
+  - run `GRANT ALL PRIVILEGES ON DATABASE "ChatAppDb" TO {USERNAME};`
+  - run `cd /server && pnpm run seed`
+### 5. Run the app
+  - create an `.env` file in the project root and copy the values from `.env.sample`
+  - add your db credentials to `POSTGRES_USER_DEV` and `POSTGRES_PASSWORD_DEV` and assign a random string to `SESSION_SECRET`
+  - from project root, run `docker-compose -f docker-compose.dev.yml up --build`
+  - open `localhost:3000` in your browser
+
+*client and server both have hot reload enable for development
 
 *Subsequent app stop/starts can use `docker-compose -f docker-compose.dev.yml up` and `docker-compose -f docker-compose.dev.yml down`
-
-What am I looking at?
-
-Two docker containers with frontend and backend images respectively. You are connected to the dev RDS instance in a private IP via a bastion connection.
-
-Am I affecting prod?
-
-No, client and server are local, the dev db you are connected to does not sync writes, and is synced with prod once daily.
