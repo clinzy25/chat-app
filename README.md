@@ -18,15 +18,14 @@ You will create an AWS custom VPC, Postgres RDS instance and bastion server, the
 ### 2. Create RDS instance and bastion server in AWS
   - `cd` into `infra/db`
   - run `terraform init`
-  - `cd` into a directory where you can store a key and run `ssh-keygen -t rsa -m PEM` to create a key pair for the bastion
   - create a file called `locals.auto.tfvars` in `infra/db`
   - add the following environment variables in the format `env_name = "ssh-rsa xxxx..."`
-    - `bastion_key_pair` and assign it to the value of the key
+    - `key_path` and assign it to a directory where you can store a key and use it for dev connections
     - `db_password` and assign a master database password
   - run `terraform apply -auto-approve`
 ### 3. Create an SSH tunnel into RDS instance
   - obtain the ip addresses of the newly created RDS database and the bastion instance
-  - `cd` into the directory containing the bastion key
+  - `cd` into the `key_path` directory containing the bastion key
   - run `ssh -i rds-bastion.pem -NL 3002:{DATABASE_IP}:5432 ec2-user@{BASTION_IP} -v` replacing the values with the IP addresses
 
 *this creates a connection to the RDS instance using the bastion as a tunnel. The connection is exposed on port 3002 on your local machine

@@ -3,6 +3,7 @@ locals {
   region        = "us-west-2"
   ami           = "ami-06e85d4c3149db26a"
   backend_sg_id = "sg-062a78c82cb628c90"
+  multi_az      = false
 }
 
 data "aws_vpc" "chat_app_vpc" {
@@ -46,7 +47,7 @@ resource "aws_db_instance" "chat_app_db" {
   db_subnet_group_name            = "rds-subnet-group"
   skip_final_snapshot             = false
   performance_insights_enabled    = true
-  multi_az                        = true
+  multi_az                        = local.multi_az
   performance_insights_kms_key_id = aws_kms_key.db_key.arn
   storage_encrypted               = true
   kms_key_id                      = aws_kms_key.db_key.arn
@@ -127,9 +128,20 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
+resource "tls_private_key" "pk" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 resource "aws_key_pair" "bastion_key_pair" {
   key_name   = "rds-bastion"
-  public_key = var.bastion_key_pair
+  public_key = tls_private_key.pk.public_key_openssh
+}
+
+resource "local_file" "ssh_key" {
+  filename        = "${var.key_path}/${aws_key_pair.bastion_key_pair.key_name}.pem"
+  content         = tls_private_key.pk.private_key_pem
+  file_permission = "0400"
 }
 
 resource "aws_instance" "rds_bastion_server" {
@@ -139,6 +151,10 @@ resource "aws_instance" "rds_bastion_server" {
   vpc_security_group_ids      = [aws_security_group.bastion.id]
   key_name                    = aws_key_pair.bastion_key_pair.key_name
   subnet_id                   = data.aws_subnet.bastion_subnet.id
+  hibernation                 = true
+  root_block_device {
+    encrypted = true
+  }
 }
 
 resource "aws_eip" "rds_bastion_eip" {
