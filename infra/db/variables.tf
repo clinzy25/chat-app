@@ -2,7 +2,7 @@ variable "db_password" {
   description = "Master db password"
   type        = string
 }
-variable "bastion_key_pair" {
-  description = "Key value for bastion key pair"
+variable "key_path" {
+  description = "Path to directory to create key"
   type        = string
 }
