@@ -36,5 +36,6 @@ You will create an AWS custom VPC, Postgres RDS instance and bastion server, the
   - run `sh start_dev` from project root
   - open `localhost:3000` in your browser
 
-*client and server both have hot reload enable for development
+*Client and server both have hot reload enable for development
+*You can start two clients simultaneously by adding the flag `--two-clients` to the start_dev command. They will be on ports 3000 and 3001.
 *Subsequent app stop/starts can use `docker-compose -f docker-compose.dev.yml up` and `docker-compose -f docker-compose.dev.yml down`

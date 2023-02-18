@@ -42,7 +42,11 @@ app.use(cookieParser())
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'https://chat01.link'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://chat01.link',
+    ],
   })
 )
 
