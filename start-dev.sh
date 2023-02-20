@@ -12,3 +12,5 @@ get_rds_ip () {
 }
 
 ssh -i rds-bastion.pem -NL 3002:$(get_rds_ip):5432 ec2-user@$(get_bastion_ip) -v & docker-compose -f $DOCKERFILE up --build
+
+trap "docker-compose -f $DOCKERFILE down & kill-port 3002" SIGHUP
