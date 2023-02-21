@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+import { baseURL } from './api'
 import store from './store'
 import {
   setNewMessage,
@@ -6,12 +7,12 @@ import {
   addOnlineUser,
 } from './store/conversations'
 
-const socket = io(window.location.origin)
+const socket = io(baseURL, { transports: ['websocket', 'polling'] })
 
 let authenticated = false
 
 socket.on('connect', () => {
-  console.log('connected to server')
+  console.log('Connected to websocket server')
   socket.emit('authentication', {
     username: store.getState().user.username,
   })

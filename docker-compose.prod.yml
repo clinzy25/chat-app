@@ -14,7 +14,7 @@ services:
       - NODE_ENV=production
       - SESSION_SECRET=${SESSION_SECRET}
     ports:
-      - "80:80"
+      - "8080:8080"
     volumes:
       - ./server:/app
       - /server/app/node_modules/
@@ -26,7 +26,7 @@ services:
     environment:
       - WATCHPACK_POLLING=true
     ports:
-      - "4200:80"
+      - "4200:8080"
     depends_on:
       - api
     volumes:

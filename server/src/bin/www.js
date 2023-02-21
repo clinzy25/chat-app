@@ -6,13 +6,22 @@ const onlineUsers = require('../onlineUsers')
 const auth = require('socketio-auth')
 const { User } = require('../db/models')
 
-const port = normalizePort(process.env.PORT || '80')
+const port = normalizePort(process.env.PORT || '8080')
 app.set('port', port)
 
 const server = http.createServer(app)
 
-const io = require('socket.io')(server)
-
+const io = require('socket.io')(server, {
+  cors: {
+    credentials: true,
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://chat01.link',
+    ],
+  },
+  transports: ['websocket', 'polling'],
+})
 io.on('connection', (socket) => {
   socket.on('go-online', (id) => {
     if (!onlineUsers.id) {
