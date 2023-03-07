@@ -1,5 +1,8 @@
 const Sequelize = require('sequelize')
-require('dotenv').config('../../.env')
+const path = require('path')
+require('dotenv').config({
+  path: path.resolve(__dirname, '..', '..', '..', '.env'),
+})
 
 const {
   POSTGRES_DATABASE,

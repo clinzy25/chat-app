@@ -7,8 +7,7 @@
     "dev": "concurrently \"npm run dev --prefix server\" \"npm start --prefix client\"",
     "start": "npm start --prefix server",
     "deploy": "concurrently \"npm run build --prefix client\" \"npm start --prefix server\"",
-    "build": "npm run build --prefix client",
-    "heroku-postbuild": "npm install && cd client && npm install --only-dev && npm run build && cd ../server && npm install --only-dev && npm run seed"
+    "build": "npm run build --prefix client"
   },
   "dependencies": {
     "concurrently": "^7.6.0"

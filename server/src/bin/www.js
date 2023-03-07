@@ -1,10 +1,13 @@
-require('dotenv').config()
 const { app, sessionStore } = require('../app')
 const http = require('http')
 const db = require('../db')
 const onlineUsers = require('../onlineUsers')
 const auth = require('socketio-auth')
 const { User } = require('../db/models')
+const path = require('path')
+require('dotenv').config({
+  path: path.resolve(__dirname, '..', '..', '.env'),
+})
 
 const port = normalizePort(process.env.PORT || '8080')
 app.set('port', port)
@@ -22,6 +25,7 @@ const io = require('socket.io')(server, {
   },
   transports: ['websocket', 'polling'],
 })
+
 io.on('connection', (socket) => {
   socket.on('go-online', (id) => {
     if (!onlineUsers.id) {

@@ -8,12 +8,11 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
 const cors = require('cors')
 const { User } = require('./db/models')
-const sessionStore = new SequelizeStore({ db })
 const cookieParser = require('cookie-parser')
 const { json, urlencoded } = express
-require('dotenv').config({ path: '../.env' })
 
 const app = express()
+const sessionStore = new SequelizeStore({ db })
 
 function checkToken(req, res, next) {
   const token = req.cookies.token
