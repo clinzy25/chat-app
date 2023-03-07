@@ -15,6 +15,9 @@ export const fetchUser = () => async (dispatch) => {
   try {
     const { data } = await api.get("/auth/user");
     dispatch(gotUser(data));
+    socket.emit('authentication', {
+      data,
+    })
   } catch (error) {
     console.error(error);
   } finally {
@@ -87,7 +90,6 @@ const saveMessage = async (body) => {
 };
 
 const sendMessage = (data, body) => {
-  console.log('here')
   socket.emit("new-message", {
     message: data.message,
     recipientId: body.recipientId,

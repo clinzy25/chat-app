@@ -13,12 +13,9 @@ let authenticated = false
 
 socket.on('connect', () => {
   console.log('Connected to websocket server')
-  socket.emit('authentication', {
-    username: store.getState().user.username,
-  })
-  socket.on('authenticated', () => {
+  socket.on('authenticated', (id) => {
     authenticated = true
-    socket.emit('go-online', store.getState().user.id)
+    socket.emit('go-online', id)
   })
 
   socket.on('add-online-user', (id) => {

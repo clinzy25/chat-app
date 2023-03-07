@@ -50,17 +50,18 @@ io.on('connection', (socket) => {
   })
 })
 
-const authenticate = async (socket, data, callback) => {
-  const username = data.username
+const authenticate = async (socket, { data }, callback) => {
+  const { username, password } = data
   try {
     const user = await User.findOne({
       where: {
-        username: username,
+        username,
       },
     })
-    callback(null, user && user.username === username)
+    callback(null, user.password === password)
+    socket.emit('authenticated', user.id)
   } catch (err) {
-    callback(err)
+    callback(new Error('User not found'))
   }
 }
 
