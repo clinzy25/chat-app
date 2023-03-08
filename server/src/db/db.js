@@ -39,14 +39,5 @@ const config =
       }
 
 const db = new Sequelize(POSTGRES_DATABASE, username, password, config)
-console.log(POSTGRES_DATABASE,
-  POSTGRES_USER_PROD,
-  POSTGRES_PASSWORD_PROD,
-  POSTGRES_USER_DEV,
-  POSTGRES_PASSWORD_DEV,
-  POSTGRES_HOST_PROD,
-  POSTGRES_PORT_PROD,
-  POSTGRES_HOST_DEV,
-  POSTGRES_PORT_DEV,
-  NODE_ENV,)
+
 module.exports = db
