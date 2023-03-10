@@ -55,10 +55,10 @@ variable "log_group_name" {
 
 variable "subnets" {
   description = "Subnets to run the service in"
-  type        = map(string)
+  type        = list
 }
 
 variable "security_group_ids" {
   description = "Security group ids for the ECS tasks"
-  type        = map(string)
+  type        = list
 }

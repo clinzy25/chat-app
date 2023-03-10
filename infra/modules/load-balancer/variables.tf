@@ -5,7 +5,7 @@ variable "env" {
 
 variable "name" {
   description = "Name of the load balancer"
-  type        = map(string)
+  type        = string
 }
 
 variable "tags" {
@@ -16,12 +16,12 @@ variable "tags" {
 
 variable "sg_ids" {
   description = "List of security group ids for the load balancer"
-  type        = map(string)
+  type        = list
 }
 
 variable "subnets" {
   description = "VPC subnets that the load balancer will use"
-  type        = set(string)
+  type        = list
 
 }
 

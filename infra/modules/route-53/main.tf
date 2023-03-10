@@ -30,7 +30,7 @@ resource "aws_route53_record" "frontend_aaaa" {
 
 resource "aws_route53_record" "backend_a" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = "${var.sub_domain_name}.${var.domain_name}"
+  name    = "${var.sub_domain_name_1}.${var.domain_name}"
   type    = "A"
 
   alias {
@@ -42,7 +42,7 @@ resource "aws_route53_record" "backend_a" {
 
 resource "aws_route53_record" "backend_aaaa" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = "${var.sub_domain_name}.${var.domain_name}"
+  name    = "${var.sub_domain_name_1}.${var.domain_name}"
   type    = "AAAA"
 
   alias {
@@ -67,6 +67,6 @@ resource "aws_acm_certificate" "cert" {
 
 resource "aws_acm_certificate_validation" "example" {
   certificate_arn         = aws_acm_certificate.cert.arn
-  validation_record_fqdns = [for record in [aws_route53_record.frontend_a, aws_route53_record.frontend_aaaa, aws_route53_record.backend_a, aws_route53_record.backend_aaaa, cname] : record.fqdn]
+  validation_record_fqdns = [for record in [aws_route53_record.frontend_a, aws_route53_record.frontend_aaaa, aws_route53_record.backend_a, aws_route53_record.backend_aaaa] : record.fqdn]
 }
 

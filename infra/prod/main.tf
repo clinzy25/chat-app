@@ -26,9 +26,9 @@ data "aws_subnet" "public_subnets" {
 }
 
 resource "aws_security_group" "frontend_lb_sg" {
-  name        = "${project}-frontend-lb"
+  name        = "${local.project}-frontend-lb"
   description = "Allow internet traffic"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.chat_app_vpc.id
 
   ingress {
     description      = "Internet traffic"
@@ -51,9 +51,9 @@ resource "aws_security_group" "frontend_lb_sg" {
 }
 
 resource "aws_security_group" "backend_lb_sg" {
-  name        = "${project}-backend-lb"
+  name        = "${local.project}-backend-lb"
   description = "Allow internet traffic and egress to frontend"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.chat_app_vpc.id
 
   ingress {
     description      = "Internet traffic"
@@ -75,9 +75,9 @@ resource "aws_security_group" "backend_lb_sg" {
 }
 
 resource "aws_security_group" "frontend_ecs_sg" {
-  name        = "${project}-frontend-ecs"
+  name        = "${local.project}-frontend-ecs"
   description = "Allow load balancer access"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.chat_app_vpc.id
 
   ingress {
     description     = "Allow load balancer access"
@@ -100,9 +100,9 @@ resource "aws_security_group" "frontend_ecs_sg" {
 }
 
 resource "aws_security_group" "backend_ecs_sg" {
-  name        = "${project}-backend-ecs"
+  name        = "${local.project}-backend-ecs"
   description = "Allow internet traffic"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.chat_app_vpc.id
 
   ingress {
     description      = "Internet traffic"
@@ -124,92 +124,97 @@ resource "aws_security_group" "backend_ecs_sg" {
   tags = local.tags
 }
 
+resource "aws_kms_key" "ecs_key" {
+  description             = "ECS execute key"
+  deletion_window_in_days = 7
+}
+
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name = "${local.project}-ecs-cluster"
+}
 
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${local.project}-cluster"
   configuration {
-    log_configuration {
-      cloud_watch_encryption_enabled = true
-      cloud_watch_log_group_name     = aws_cloudwatch_log_group.ecs_logs.name
+    execute_command_configuration {
+      kms_key_id = aws_kms_key.ecs_key.arn
+      logging    = "OVERRIDE"
+      log_configuration {
+        cloud_watch_encryption_enabled = true
+        cloud_watch_log_group_name     = aws_cloudwatch_log_group.ecs_logs.name
+      }
     }
   }
-}
-
-resource "aws_cloudwatch_log_group" "ecs_logs" {
-  name = "/ecs/${var.project}-${var.component}"
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
   name               = "ecsTaskExecutionRole"
   tags               = local.tags
-  depends_on         = [aws_iam_role_policy.task_execution_policy]
   assume_role_policy = <<EOF
     {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": "sts:AssumeRole",
-        "Principal": {
-          "Service": "ecs-tasks.amazonaws.com"
-        },
-        "Effect": "Allow",
-        "Sid": ""
-      }
-    ]
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": "ecs-tasks.amazonaws.com"
+          },
+          "Effect": "Allow",
+          "Sid": ""
+        }
+      ]
     }
     EOF
 }
 
 resource "aws_iam_role_policy" "task_execution_policy" {
-  name   = "ecsTaskExecutionRolePolicy"
-  role   = aws_iam_role.ecs_task_execution_role.id
-  policy = <<EOF
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "ecr:GetAuthorizationToken",
-                    "ecr:BatchCheckLayerAvailability",
-                    "ecr:GetDownloadUrlForLayer",
-                    "ecr:BatchGetImage",
-                    "logs:CreateLogStream",
-                    "logs:PutLogEvents"
-                ],
-                "Resource": "*"
-            }
+  name = "ecsTaskExecutionRolePolicy"
+  role = aws_iam_role.ecs_task_execution_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
         ]
-    }
-    EOF
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
 }
 
 module "frontend_lb" {
-  source                          = "../modules/load-balancer"
-  env                             = local.env
-  name                            = "${project}-frontend-lb"
-  tags                            = local.tags
-  sg_ids                          = [aws_security_group.frontend_lb_sg.id]
-  subnets                         = [data.aws_subnet.public_subnets.ids]
-  vpc_id                          = data.aws_vpc.chat_app_vpc.id
-  https                           = true
-  http                            = true
-  https_acm_cert_arn              = module.route_53.acm_cert_arn
-  tg_port                         = 80
+  source             = "../modules/load-balancer"
+  env                = local.env
+  name               = "${local.project}-frontend-lb"
+  tags               = local.tags
+  sg_ids             = [aws_security_group.frontend_lb_sg.id]
+  subnets            = [data.aws_subnet.public_subnets.id]
+  vpc_id             = data.aws_vpc.chat_app_vpc.id
+  https              = true
+  http               = true
+  https_acm_cert_arn = module.route_53.acm_cert_arn
+  tg_port            = 80
 }
 
 module "backend_lb" {
-  source                          = "../modules/load-balancer"
-  env                             = local.env
-  name                            = "${project}-backend-lb"
-  tags                            = local.tags
-  sg_ids                          = [aws_security_group.backend_lb_sg.id]
-  subnets                         = [data.aws_subnet.public_subnets.ids]
-  vpc_id                          = data.aws_vpc.chat_app_vpc.id
-  http                            = true
-  https                           = true
-  https_acm_cert_arn              = module.route_53.acm_cert_arn
-  tg_port                         = 80
+  source             = "../modules/load-balancer"
+  env                = local.env
+  name               = "${local.project}-backend-lb"
+  tags               = local.tags
+  sg_ids             = [aws_security_group.backend_lb_sg.id]
+  subnets            = [data.aws_subnet.public_subnets.id]
+  vpc_id             = data.aws_vpc.chat_app_vpc.id
+  http               = true
+  https              = true
+  https_acm_cert_arn = module.route_53.acm_cert_arn
+  tg_port            = 80
 }
 
 module "route_53" {
@@ -218,9 +223,9 @@ module "route_53" {
   domain_name          = "chat01.link"
   sub_domain_name_1    = "api"
   frontend_lb_dns_name = module.frontend_lb.lb_dns_name
-  frontend_lb_zone_id  = module.frontend_lb.lb_zone_id
+  frontend_zone_id     = module.frontend_lb.lb_zone_id
   backend_lb_dns_name  = module.backend_lb.lb_dns_name
-  backend_lb_zone_id   = module.backend_lb.lb_zone_id
+  backend_zone_id      = module.backend_lb.lb_zone_id
 }
 
 module "frontend_ecr" {
@@ -250,7 +255,7 @@ module "frontend_ecs" {
   image_uri               = module.frontend_ecr.ecr_url
   image_digest            = module.frontend_ecr.latest_digest
   log_group_name          = aws_cloudwatch_log_group.ecs_logs.name
-  subnets                 = [data.aws_subnet.public_subnets.ids]
+  subnets                 = [data.aws_subnet.public_subnets.id]
   security_group_ids      = [aws_security_group.frontend_ecs_sg.id]
 }
 
@@ -267,6 +272,6 @@ module "backend_ecs" {
   image_uri               = module.backend_ecr.ecr_url
   image_digest            = module.backend_ecr.latest_digest
   log_group_name          = aws_cloudwatch_log_group.ecs_logs.name
-  subnets                 = [data.aws_subnet.public_subnets.ids]
+  subnets                 = [data.aws_subnet.public_subnets.id]
   security_group_ids      = [aws_security_group.backend_ecs_sg.id]
 }

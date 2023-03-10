@@ -6,8 +6,8 @@ resource "aws_ecs_service" "service" {
   iam_role        = var.task_execution_role_arn
 
   network_configuration {
-    subnets          = var.vpc_subnets
-    security_groups  = [aws_security_group.ecs_tasks.id]
+    subnets          = var.subnets
+    security_groups  = var.security_group_ids
     assign_public_ip = true
   }
 
@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "task_def" {
   execution_role_arn       = var.task_execution_role_arn
   task_role_arn            = var.task_execution_role_arn
 
-  runtimePlatform {
+  runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
   }
