@@ -246,7 +246,8 @@ module "frontend_ecs" {
   target_group_arn        = module.frontend_lb.target_group_arn
   container_name          = "${local.project}-frontend"
   container_port          = 80
-  image_uri               = "dfiuobasdfgasd"
+  image_uri               = module.frontend_ecr.ecr_url
+  image_digest            = module.frontend_ecr.latest_digest
   log_group_name          = aws_cloudwatch_log_group.ecs_logs.name
   subnets                 = [data.aws_subnet.public_subnets.ids]
   security_group_ids      = [aws_security_group.frontend_ecs_sg.id]
@@ -261,7 +262,8 @@ module "backend_ecs" {
   target_group_arn        = module.backend_lb.target_group_arn
   container_name          = "${local.project}-backend"
   container_port          = 80
-  image_uri               = "dfiuobasdfgasd"
+  image_uri               = module.backend_ecr.ecr_url
+  image_digest            = module.backend_ecr.latest_digest
   log_group_name          = aws_cloudwatch_log_group.ecs_logs.name
   subnets                 = [data.aws_subnet.public_subnets.ids]
   security_group_ids      = [aws_security_group.backend_ecs_sg.id]

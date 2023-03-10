@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "task_def" {
     [
         {
             "name": "${var.project}-${var.component}",
-            "image": "${var.image_uri}",
+            "image": "${var.image_uri}:latest@${var.image_digest}"",
             "cpu": 1024,
             "portMappings": [
                 {

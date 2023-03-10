@@ -38,6 +38,11 @@ variable "container_port" {
   type        = string
 }
 
+variable "image_digest" {
+  description = "Digest of the latest ECR image"
+  type        = string
+}
+
 variable "image_uri" {
   description = "URI of the ECR docker image"
   type        = string
