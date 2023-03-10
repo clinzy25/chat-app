@@ -192,9 +192,9 @@ module "frontend_lb" {
   sg_ids                          = [aws_security_group.frontend_lb_sg.id]
   subnets                         = [data.aws_subnet.public_subnets.ids]
   vpc_id                          = data.aws_vpc.chat_app_vpc.id
-  https_listener_cert_domain_name = "chat01.link"
   https                           = true
   http                            = true
+  https_acm_cert_arn              = module.route_53.acm_cert_arn
   tg_port                         = 80
 }
 
@@ -206,9 +206,9 @@ module "backend_lb" {
   sg_ids                          = [aws_security_group.backend_lb_sg.id]
   subnets                         = [data.aws_subnet.public_subnets.ids]
   vpc_id                          = data.aws_vpc.chat_app_vpc.id
-  https_listener_cert_domain_name = "chat01.link"
-  https                           = true
   http                            = true
+  https                           = true
+  https_acm_cert_arn              = module.route_53.acm_cert_arn
   tg_port                         = 80
 }
 
@@ -238,6 +238,7 @@ module "backend_ecr" {
 }
 
 module "frontend_ecs" {
+  source                  = "../modules/ecs"
   env                     = local.env
   project                 = local.project
   component               = "frontend"
@@ -254,6 +255,7 @@ module "frontend_ecs" {
 }
 
 module "backend_ecs" {
+  source                  = "../modules/ecs"
   env                     = local.env
   project                 = local.project
   component               = "backend"

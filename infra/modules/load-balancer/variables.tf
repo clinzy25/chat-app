@@ -33,6 +33,7 @@ variable "vpc_id" {
 variable "https_acm_cert_arn" {
   description = "ACM certificate arn for the https listener"
   type        = string
+  default     = ""
 }
 variable "https" {
   description = "Create an HTTPS listener"
