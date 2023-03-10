@@ -15,7 +15,7 @@ variable "tags" {
 
 variable "sg_ids" {
   description = "List of security group ids for the load balancer"
-  type = map(string)
+  type        = map(string)
 }
 
 variable "subnets" {
@@ -40,11 +40,16 @@ variable "https" {
 }
 
 variable "http" {
-  description = "Create an HTTPS listener"
+  description = "Create an HTTP listener"
   type        = bool
 }
 
 variable "target_id" {
   description = "Target id of the load balancer target group"
-  type = string
+  type        = string
+}
+
+variable "tg_port" {
+  description = "Port for the target group"
+  type        = number
 }

@@ -38,7 +38,7 @@ resource "aws_lb_listener" "https" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.front_end.arn
+    target_group_arn = aws_lb_target_group.alb_tg.arn
   }
 }
 
@@ -62,11 +62,10 @@ resource "aws_acm_certificate" "cert" {
   }
 }
 
-
 resource "aws_lb_target_group" "alb_tg" {
   name        = var.name
   target_type = "alb"
-  port        = 80
+  port        = var.tg_port
   protocol    = "TCP"
   vpc_id      = var.vpc_id
 
@@ -76,7 +75,7 @@ resource "aws_lb_target_group" "alb_tg" {
     unhealthy_threshold = 5
     interval            = 30
     path                = "/"
-    port                = 80
+    port                = var.tg_port
     timeout             = 5
   }
 }
@@ -84,5 +83,5 @@ resource "aws_lb_target_group" "alb_tg" {
 resource "aws_lb_target_group_attachment" "alb_tg_attachment" {
   target_group_arn = aws_lb_target_group.alb_tg.arn
   target_id        = var.target_id
-  port             = 80
+  port             = var.tg_port
 }
