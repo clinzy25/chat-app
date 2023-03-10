@@ -5,12 +5,13 @@ variable "env" {
 
 variable "name" {
   description = "Name of the load balancer"
-  type        = string
+  type        = map(string)
 }
 
 variable "tags" {
   description = "Load balancer tags"
-  type        = string
+  type        = map(string)
+  default     = {}
 }
 
 variable "sg_ids" {
