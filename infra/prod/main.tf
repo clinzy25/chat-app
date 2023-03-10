@@ -1,8 +1,8 @@
 locals {
-  env     = "dev"
+  env     = "prod"
   project = "chat-app"
   tags = {
-    env     = "dev"
+    env     = "prod"
     project = "chat-app"
   }
 }
@@ -88,6 +88,7 @@ module "frontend_lb" {
   target_id                       = "asdfasd"
   tg_port                         = 80
 }
+
 module "backend_lb" {
   source                          = "../modules/load-balancer"
   env                             = local.env
