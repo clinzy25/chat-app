@@ -44,11 +44,6 @@ variable "http" {
   type        = bool
 }
 
-variable "target_id" {
-  description = "Target id of the load balancer target group"
-  type        = string
-}
-
 variable "tg_port" {
   description = "Port for the target group"
   type        = number

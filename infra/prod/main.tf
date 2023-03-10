@@ -74,6 +74,116 @@ resource "aws_security_group" "backend_lb_sg" {
   tags = local.tags
 }
 
+resource "aws_security_group" "frontend_ecs_sg" {
+  name        = "${project}-frontend-ecs"
+  description = "Allow load balancer access"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description     = "Allow load balancer access"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "HTTP"
+    security_groups = ["${aws_security_group.frontend_lb_sg.id}"]
+  }
+
+  egress {
+    description     = "Allow backend access"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "HTTP"
+    security_groups = ["${aws_security_group.backend_lb_sg.id}"]
+
+  }
+
+  tags = local.tags
+}
+
+resource "aws_security_group" "backend_ecs_sg" {
+  name        = "${project}-backend-ecs"
+  description = "Allow internet traffic"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description      = "Internet traffic"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = local.tags
+}
+
+
+resource "aws_ecs_cluster" "ecs_cluster" {
+  name = "${local.project}-cluster"
+  configuration {
+    log_configuration {
+      cloud_watch_encryption_enabled = true
+      cloud_watch_log_group_name     = aws_cloudwatch_log_group.ecs_logs.name
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name = "/ecs/${var.project}-${var.component}"
+}
+
+resource "aws_iam_role" "ecs_task_execution_role" {
+  name               = "ecsTaskExecutionRole"
+  tags               = local.tags
+  depends_on         = [aws_iam_role_policy.task_execution_policy]
+  assume_role_policy = <<EOF
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "sts:AssumeRole",
+        "Principal": {
+          "Service": "ecs-tasks.amazonaws.com"
+        },
+        "Effect": "Allow",
+        "Sid": ""
+      }
+    ]
+    }
+    EOF
+}
+
+resource "aws_iam_role_policy" "task_execution_policy" {
+  name   = "ecsTaskExecutionRolePolicy"
+  role   = aws_iam_role.ecs_task_execution_role.id
+  policy = <<EOF
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "ecr:GetAuthorizationToken",
+                    "ecr:BatchCheckLayerAvailability",
+                    "ecr:GetDownloadUrlForLayer",
+                    "ecr:BatchGetImage",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ],
+                "Resource": "*"
+            }
+        ]
+    }
+    EOF
+}
+
 module "frontend_lb" {
   source                          = "../modules/load-balancer"
   env                             = local.env
@@ -85,7 +195,6 @@ module "frontend_lb" {
   https_listener_cert_domain_name = "chat01.link"
   https                           = true
   http                            = true
-  target_id                       = "asdfasd"
   tg_port                         = 80
 }
 
@@ -100,7 +209,6 @@ module "backend_lb" {
   https_listener_cert_domain_name = "chat01.link"
   https                           = true
   http                            = true
-  target_id                       = "asdfasd"
   tg_port                         = 80
 }
 
@@ -116,7 +224,7 @@ module "route_53" {
 }
 
 module "frontend_ecr" {
-  source = "../modules/ecr"
+  source    = "../modules/ecr"
   env       = local.env
   project   = local.project
   component = "frontend"
@@ -127,4 +235,34 @@ module "backend_ecr" {
   env       = local.env
   project   = local.project
   component = "backend"
+}
+
+module "frontend_ecs" {
+  env                     = local.env
+  project                 = local.project
+  component               = "frontend"
+  cluster_id              = aws_ecs_cluster.ecs_cluster.id
+  task_execution_role_arn = aws_iam_role.ecs_task_execution_role.id
+  target_group_arn        = module.frontend_lb.target_group_arn
+  container_name          = "${local.project}-frontend"
+  container_port          = 80
+  image_uri               = "dfiuobasdfgasd"
+  log_group_name          = aws_cloudwatch_log_group.ecs_logs.name
+  subnets                 = [data.aws_subnet.public_subnets.ids]
+  security_group_ids      = [aws_security_group.frontend_ecs_sg.id]
+}
+
+module "backend_ecs" {
+  env                     = local.env
+  project                 = local.project
+  component               = "backend"
+  cluster_id              = aws_ecs_cluster.ecs_cluster.id
+  task_execution_role_arn = aws_iam_role.ecs_task_execution_role.id
+  target_group_arn        = module.backend_lb.target_group_arn
+  container_name          = "${local.project}-backend"
+  container_port          = 80
+  image_uri               = "dfiuobasdfgasd"
+  log_group_name          = aws_cloudwatch_log_group.ecs_logs.name
+  subnets                 = [data.aws_subnet.public_subnets.ids]
+  security_group_ids      = [aws_security_group.backend_ecs_sg.id]
 }
