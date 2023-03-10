@@ -114,3 +114,17 @@ module "route_53" {
   backend_lb_dns_name  = module.backend_lb.lb_dns_name
   backend_lb_zone_id   = module.backend_lb.lb_zone_id
 }
+
+module "frontend_ecr" {
+  source = "../modules/ecr"
+  env       = local.env
+  project   = local.project
+  component = "frontend"
+}
+
+module "backend_ecr" {
+  source    = "../modules/ecr"
+  env       = local.env
+  project   = local.project
+  component = "backend"
+}
