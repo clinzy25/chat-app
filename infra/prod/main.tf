@@ -103,3 +103,14 @@ module "backend_lb" {
   target_id                       = "asdfasd"
   tg_port                         = 80
 }
+
+module "route_53" {
+  source               = "../modules/route-53"
+  env                  = local.env
+  domain_name          = "chat01.link"
+  sub_domain_name_1    = "api"
+  frontend_lb_dns_name = module.frontend_lb.lb_dns_name
+  frontend_lb_zone_id  = module.frontend_lb.lb_zone_id
+  backend_lb_dns_name  = module.backend_lb.lb_dns_name
+  backend_lb_zone_id   = module.backend_lb.lb_zone_id
+}
