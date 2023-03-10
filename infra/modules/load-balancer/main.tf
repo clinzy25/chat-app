@@ -34,31 +34,11 @@ resource "aws_lb_listener" "https" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.cert.arn
+  certificate_arn   = var.https_acm_cert_arn
 
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb_tg.arn
-  }
-}
-
-resource "aws_lb_listener_certificate" "example" {
-  count             = var.https ? 1 : 0
-  listener_arn    = aws_lb_listener.https.arn
-  certificate_arn = aws_acm_certificate.cert.arn
-}
-
-resource "aws_acm_certificate" "cert" {
-  count             = var.https ? 1 : 0
-  domain_name       = var.https_listener_cert_domain_name
-  validation_method = "DNS"
-
-  tags = {
-    Environment = var.env
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
 

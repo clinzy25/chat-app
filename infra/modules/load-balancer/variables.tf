@@ -30,11 +30,10 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "https_listener_cert_domain_name" {
-  description = "Domain name for HTTPS certificate for HTTPS load balancer listener"
+variable "https_acm_cert_arn" {
+  description = "ACM certificate arn for the https listener"
   type        = string
 }
-
 variable "https" {
   description = "Create an HTTPS listener"
   type        = bool
