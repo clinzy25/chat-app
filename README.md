@@ -1,6 +1,6 @@
 # Messenger
 
-A one-to-one realtime chat app. Not novel in functionality, but used as a cloud / ops test bed.
+A one-to-one realtime chat app.
 
 # Running Application Locally
 You will create an AWS custom VPC, Postgres RDS instance and bastion server, then launch two docker containers for the client and the server, using the bastion as a secure tunnel into the RDS instance.
